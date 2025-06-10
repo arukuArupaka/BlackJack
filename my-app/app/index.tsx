@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { Image, ImageBackground, TouchableOpacity, View, Text } from "react-native";
 
@@ -40,7 +41,7 @@ export default function Index() {
           </View>
         </View>
 
-        <TouchableOpacity style={{width:300,height:150,backgroundColor:"#D9D9D9",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
+        <TouchableOpacity onPress={() => router.push("/game")} style={{width:300,height:150,backgroundColor:"#D9D9D9",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
            <Image
           source={require('../image/start.jpg')}
           style={{width:220,height:50}}>

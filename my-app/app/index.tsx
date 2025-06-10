@@ -23,7 +23,7 @@ export default function Index() {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Image
         source={require('../image/title.jpg')}
-        style={{ width:300, height:295, bottom:180}}>
+        style={{width:300,height:200,position:"absolute",top:100}}>
         </Image>
         <View>
 

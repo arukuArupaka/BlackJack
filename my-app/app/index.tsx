@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View, Text } from "react-native";
 
 export default function Index() {
   const [number, setNumber] = useState(0);
@@ -23,19 +23,30 @@ export default function Index() {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Image
         source={require('../image/title.jpg')}
-        style={{width:"67%",height:"22%", marginVertical:30}}>
+        style={{width:"67%",height:"22%", marginBottom:200}}>
         </Image>
-        <View style={{width:200,height:100,backgroundColor:"#ffffff",marginVertical:30}}></View>
+        <View style={{justifyContent: "center", alignItems: "center",flexDirection:"row",gap:20}}>
+          <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
+            <Text style={{color:"white"}}>50</Text>
+          </View>
+          <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
+            <Text style={{color:"white"}}>100</Text>
+          </View>
+          <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
+            <Text style={{color:"white"}}>500</Text>
+          </View>
+          <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
+            <Text style={{color:"white"}}>1k</Text>
+          </View>
+        </View>
 
-        <TouchableOpacity style={{width:300,height:200,backgroundColor:"#ffd700",justifyContent: "center", alignItems: "center",marginVertical:30,borderRadius:30}}>
+        <TouchableOpacity style={{width:300,height:150,backgroundColor:"#D9D9D9",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
            <Image
           source={require('../image/start.jpg')}
-          style={{width:250,height:60}}>
+          style={{width:220,height:50}}>
             </Image>
 
         </TouchableOpacity>
-        
-       
       </View>
     </ImageBackground>
   );

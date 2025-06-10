@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, ImageBackground, View } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const [number, setNumber] = useState(0);
@@ -23,11 +23,19 @@ export default function Index() {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Image
         source={require('../image/title.jpg')}
-        style={{width:"67%",height:"22%",position:"absolute",top:100}}>
+        style={{width:"67%",height:"22%", marginVertical:30}}>
         </Image>
-        <View>
+        <View style={{width:200,height:100,backgroundColor:"#ffffff",marginVertical:30}}></View>
 
-        </View>
+        <TouchableOpacity style={{width:300,height:200,backgroundColor:"#ffd700",justifyContent: "center", alignItems: "center",marginVertical:30,borderRadius:30}}>
+           <Image
+          source={require('../image/start.jpg')}
+          style={{width:250,height:60}}>
+            </Image>
+
+        </TouchableOpacity>
+        
+       
       </View>
     </ImageBackground>
   );

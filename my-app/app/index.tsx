@@ -1,6 +1,5 @@
-import { Text, View, StyleSheet, TouchableOpacity, ImageBackground, Image } from "react-native";
 import { useState } from "react";
-import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
+import { Image, ImageBackground, View } from "react-native";
 
 export default function Index() {
   const [number, setNumber] = useState(0);
@@ -23,7 +22,7 @@ export default function Index() {
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Image
-        source={require('C:/Users/mrims/OneDrive/デスクトップ/arupaka/BlackJack/my-app/image/title.jpg')}
+        source={require('../image/title.jpg')}
         style={{ width:300, height:295, bottom:180}}>
         </Image>
         <View>

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ImageBackground, Image } from "react-native";
 import { useState } from "react";
 import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
 
@@ -22,16 +22,12 @@ export default function Index() {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <TouchableOpacity onPress={() => setNumber(numberIncrease(number))} style={{ height:100, width:300, backgroundColor:"red", justifyContent:"center", alignItems:"center"}}>
-          <Text style={{ color:"white", fontSize:20, fontWeight:"bold"}}>ボタン</Text>
-        </TouchableOpacity>
+        <Image
+        source={require('C:/Users/mrims/OneDrive/デスクトップ/arupaka/BlackJack/my-app/image/title.jpg')}
+        style={{ width:300, height:295, bottom:180}}>
+        </Image>
         <View>
-          <Text style={{ fontSize: 60, fontWeight: "bold", paddingTop: 20, color: (number %11 === 0 && number !== 0) ? "red" : "white"}}>{number}</Text>
-        </View>
-        <View>
-          <TouchableOpacity onPress={() =>setNumber(numberDecrease(number))} style={{height:100, width:300, backgroundColor:"blue", justifyContent:"center", alignItems:"center" }}>
-            <Text style={{ color:"white", fontSize:20, fontWeight: "bold", }}>ボタン</Text>
-          </TouchableOpacity>
+
         </View>
       </View>
     </ImageBackground>

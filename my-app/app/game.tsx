@@ -83,7 +83,6 @@ return(
  <TouchableOpacity onPress={drawtwocards} style= {{height:98, width:77, backgroundColor:"rgba(217, 217, 217, 0.47)", justifyContent:"center", alignItems:"center",borderRadius:15}}>
                  
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
-        {cards[0] && (
           <Image
             source={cardImages[cards[0]]}
             style={{
@@ -94,8 +93,7 @@ return(
               borderRadius: 10,
             }}
           />
-        )}
-        {cards[1] && (
+    
           <Image
             source={cardImages[cards[1]]}
             style={{
@@ -106,14 +104,13 @@ return(
               borderRadius: 10,
             }}
           />
-        )}
       </View>
             </TouchableOpacity>
 
 
             <TouchableOpacity onPress={drawtwocards2} style= {{height:98, width:77, backgroundColor:"rgba(217, 217, 217, 0.47)", justifyContent:"center", alignItems:"center",borderRadius:15, marginTop:150}}>
                <View style={{ flexDirection: 'row', marginTop: 20 }}>
-        {cards[0] && (
+
           <Image
             source={cardImages[cards2[0]]}
             style={{
@@ -124,8 +121,7 @@ return(
               borderRadius: 10,
             }}
           />
-        )}
-        {cards[1] && (
+
           <Image
             source={cardImages[cards2[1]]}
             style={{
@@ -136,10 +132,8 @@ return(
               borderRadius: 10,
             }}
           />
-        )}
       </View>
               
-
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.push("/result")} style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>

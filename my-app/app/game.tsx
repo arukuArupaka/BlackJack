@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
  const cardImages: Record<string, any> = { //ここなに？？？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
@@ -81,20 +81,63 @@ return(
         >
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
  <TouchableOpacity onPress={drawtwocards} style= {{height:98, width:77, backgroundColor:"rgba(217, 217, 217, 0.47)", justifyContent:"center", alignItems:"center",borderRadius:15}}>
-              <Text>{cards[0]}</Text>
-              <Text style={{ position: 'absolute', bottom: 10, right: 10 }}>{cards[1]}</Text>
                  
-                  {cards.map((card) => ( //ここなに？？？この指定をしないとカードは表示できない？？できない？？
-            <Image
-              key={card} // カード名をkeyに
-              source={cardImages[card]}
-            />))}
-
+      <View style={{ flexDirection: 'row', marginTop: 20 }}>
+        {cards[0] && (
+          <Image
+            source={cardImages[cards[0]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginRight: -20,
+              zIndex: 2,
+              borderRadius: 10,
+            }}
+          />
+        )}
+        {cards[1] && (
+          <Image
+            source={cardImages[cards[1]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: 1,
+              borderRadius: 10,
+            }}
+          />
+        )}
+      </View>
             </TouchableOpacity>
 
 
             <TouchableOpacity onPress={drawtwocards2} style= {{height:98, width:77, backgroundColor:"rgba(217, 217, 217, 0.47)", justifyContent:"center", alignItems:"center",borderRadius:15, marginTop:150}}>
-              <Text>{cards2}</Text>
+               <View style={{ flexDirection: 'row', marginTop: 20 }}>
+        {cards[0] && (
+          <Image
+            source={cardImages[cards2[0]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginRight: -20,
+              zIndex: 2,
+              borderRadius: 10,
+            }}
+          />
+        )}
+        {cards[1] && (
+          <Image
+            source={cardImages[cards2[1]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: 1,
+              borderRadius: 10,
+            }}
+          />
+        )}
+      </View>
               
 
             </TouchableOpacity>

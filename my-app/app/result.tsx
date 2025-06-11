@@ -1,11 +1,10 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import {
-  Image,
   ImageBackground,
-  TouchableOpacity,
-  View,
   Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 
 export default function Index() {
@@ -31,7 +30,7 @@ export default function Index() {
         style={{ flex: 1, marginTop: 50, marginVertical: 20, borderRadius: 30 }}
       >
         <TouchableOpacity
-          onPress={() => router.push("/result")}
+          onPress={() => router.push("/")} 
           style={{
             width: 200,
             height: 140,

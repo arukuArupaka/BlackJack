@@ -22,13 +22,14 @@ return(
           style={{ flex: 1 }}
         >
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+
             <TouchableOpacity onPress={drawtwocards} style= {{height:100, width:200, backgroundColor:"red", justifyContent:"center", alignItems:"center"}}>
               <Text>{cards}</Text>
 
 
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.back()} style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
+            <TouchableOpacity onPress={() => router.push("/result")} style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
            <Image
           source={require('../image/start.jpg')}
           style={{width:171.5,height:85.5}}>

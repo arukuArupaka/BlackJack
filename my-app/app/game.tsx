@@ -1,7 +1,7 @@
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useCallback, } from "react";
 import { Image, ImageBackground, TouchableOpacity, View, } from "react-native";
- const cardImages: Record<string, any> = { //ここなに？？？
+ const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
   "03c": require("../cards/03c.gif"),
@@ -55,6 +55,22 @@ import { Image, ImageBackground, TouchableOpacity, View, } from "react-native";
   "12s": require("../cards/12s.gif"),
   "13s": require("../cards/13s.gif"),
 };
+
+const CardScores :Record<string,number>={
+  "01": 1,
+  "02": 2,
+  "03": 3,
+  "04": 4,
+  "05": 5,
+  "06": 6,
+  "07": 7,
+  "08": 8,
+  "09": 9,
+  "10":10,
+  "11":10,
+  "12":10,
+  "13":10,
+}
 export default function Game() {
  
   const [cards, setCards] = useState<string[]>([]);
@@ -63,23 +79,28 @@ export default function Game() {
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
-  const drawtwocards = () =>{
-  const shuffle = [...deck].sort(() => Math.random() - 0.5);//シャッフル
-  const draw = shuffle.slice(0, 2);//二枚ドロー
-  setCards(draw) ;
-  }
-  const drawtwocards2 = () =>{
-  const shuffle = [...deck].sort(() => Math.random() - 0.5);//シャッフル
-  const draw = shuffle.slice(0, 2);//二枚ドロー
-  setCards2(draw) ;
-  };
+
+  const drawTwoCards = useCallback(() => {
+  const shuffle = [...deck].sort(() => Math.random() - 0.5);
+  setCards(shuffle.slice(0, 2));
+  setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
+  }, [deck]);
+
+  const hit = useCallback(() =>{
+    const  saveDeck = deck.filter((card) => !cards.includes(card)&& !cards2.includes(card));
+    if(saveDeck.length > 0){
+      const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
+      setCards((prev) => [...prev, shuffle[0]]);
+    }
+  }, [cards,cards2,deck]);//なんだこれ
+
   useEffect(() =>{
-    drawtwocards();
-    drawtwocards2();
-  },[]        //空の依存配列でマウント時のみ実行とのことですが意味が分かりません
-
-  )
-
+    drawTwoCards();
+    
+  },[]        
+  );
+  
+ 
 
 return(
     <ImageBackground 
@@ -100,6 +121,7 @@ return(
               borderRadius: 10,
             }}
           />
+
     
           <Image
             source={cardImages[cards[1]]}
@@ -124,7 +146,7 @@ return(
               width: 100,
               height: 140,
               marginRight: -20,
-              zIndex: 2,
+              zIndex: 1,
               borderRadius: 10,
             }}
           />
@@ -135,10 +157,21 @@ return(
               width: 100,
               height: 140,
               marginLeft: -20,
-              zIndex: 1,
+              zIndex: 2,
               borderRadius: 10,
             }}
           />
+
+           {cards.slice(2).map((card,index) => (
+            <Image
+            key = {card}
+            source = {cardImages[card]}
+            style = {{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: index + 2  }}/>
+          ))}
       </View>
               
           
@@ -151,7 +184,8 @@ return(
             
             
         </TouchableOpacity>
-    <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>     <TouchableOpacity  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20,marginRight:20}}>
+    <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>    
+       <TouchableOpacity onPress={() => hit()} style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20,marginRight:20}}>
            <Image
           source={require('../image/hitimage.png')}
           style={{width:171.5,height:85.5, }}>

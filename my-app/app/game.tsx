@@ -1,6 +1,6 @@
 import { router } from "expo-router";
-import { useState } from "react";
-import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Image, ImageBackground, TouchableOpacity, View,  } from "react-native";
  const cardImages: Record<string, any> = { //ここなに？？？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
@@ -72,7 +72,14 @@ export default function Game() {
   const shuffle = [...deck].sort(() => Math.random() - 0.5);//シャッフル
   const draw = shuffle.slice(0, 2);//二枚ドロー
   setCards2(draw) ;
-};
+  };
+  useEffect(() =>{
+    drawtwocards();
+    drawtwocards2();
+  },[]        //空の依存配列でマウント時のみ実行とのことですが意味が分かりません
+
+  )
+
 
 return(
     <ImageBackground 
@@ -80,7 +87,7 @@ return(
           style={{ flex: 1 }}
         >
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
- <TouchableOpacity onPress={drawtwocards} style= {{height:98, width:77, backgroundColor:"rgba(217, 217, 217, 0.47)", justifyContent:"center", alignItems:"center",borderRadius:15}}>
+ 
                  
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
           <Image
@@ -105,10 +112,10 @@ return(
             }}
           />
       </View>
-            </TouchableOpacity>
+         
 
 
-            <TouchableOpacity onPress={drawtwocards2} style= {{height:98, width:77, backgroundColor:"rgba(217, 217, 217, 0.47)", justifyContent:"center", alignItems:"center",borderRadius:15, marginTop:150}}>
+           
                <View style={{ flexDirection: 'row', marginTop: 20 }}>
 
           <Image
@@ -134,7 +141,7 @@ return(
           />
       </View>
               
-            </TouchableOpacity>
+          
 
             <TouchableOpacity onPress={() => router.push("/result")} style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
            <Image

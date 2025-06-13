@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, ImageBackground, TouchableOpacity, View,  } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View, } from "react-native";
  const cardImages: Record<string, any> = { //ここなに？？？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
@@ -116,7 +116,7 @@ return(
 
 
            
-               <View style={{ flexDirection: 'row', marginTop: 20 }}>
+               <View style={{ flexDirection: 'row', marginTop: 40 }}>
 
           <Image
             source={cardImages[cards2[0]]}
@@ -143,21 +143,22 @@ return(
               
           
 
-            <TouchableOpacity onPress={() => router.push("/result")} style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
+            <TouchableOpacity onPress={() => router.push("/result")} style={{width:171.5,height:85.5,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
            <Image
-          source={require('../image/start.jpg')}
+          source={require('../image/doubleupimage.png')}
           style={{width:171.5,height:85.5}}>
             </Image>
-
+            
+            
         </TouchableOpacity>
-    <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>     <TouchableOpacity  style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:20,marginRight:20}}>
+    <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>     <TouchableOpacity  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20,marginRight:20}}>
            <Image
           source={require('../image/hitimage.png')}
           style={{width:171.5,height:85.5, }}>
             </Image>
 
         </TouchableOpacity>
-    <TouchableOpacity  style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:20}}>
+    <TouchableOpacity  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20}}>
            <Image
           source={require('../image/standimage.png')}
           style={{width:171.5,height:85.5, }}>

@@ -145,14 +145,14 @@ return(
         </TouchableOpacity>
     <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>     <TouchableOpacity  style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:20,marginRight:20}}>
            <Image
-          source={require('../image/start.jpg')}
+          source={require('../image/hitimage.png')}
           style={{width:171.5,height:85.5, }}>
             </Image>
 
         </TouchableOpacity>
     <TouchableOpacity  style={{width:171.5,height:85.5,backgroundColor:"#DDDDDD",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:20}}>
            <Image
-          source={require('../image/start.jpg')}
+          source={require('../image/standimage.png')}
           style={{width:171.5,height:85.5, }}>
             </Image>
 

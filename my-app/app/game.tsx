@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect, useState , useCallback, } from "react";
-import { Image, ImageBackground, TouchableOpacity, View, } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View, Text, } from "react-native";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
@@ -75,10 +75,33 @@ export default function Game() {
  
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);
+  const [myScore, setMyScore] = useState<number>(0);
+  const [dealerScore, setDealerScore] = useState<number>(0);
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
+  const calcScore = (hand:string[]) : number =>{
+    let score = 0;
+    let aceNum = 0;
+
+    hand.forEach((card) =>{
+      const cardNum = card.slice(0,-1);//-1??
+      if(cardNum === "01"){
+        aceNum += 1;
+      } else{
+        score += CardScores[cardNum];
+      }
+    });
+        for(let i = 0; i < aceNum; i++){
+          if(score + 11 <=21){
+            score += 11;
+          }else{
+            score += 1;
+          }
+        }  
+        return score;
+  }
 
   const drawTwoCards = useCallback(() => {
   const shuffle = [...deck].sort(() => Math.random() - 0.5);
@@ -86,19 +109,26 @@ export default function Game() {
   setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
   }, [deck]);
 
-  const hit = useCallback(() =>{
+  const hit = useCallback(() =>{    //
     const  saveDeck = deck.filter((card) => !cards.includes(card)&& !cards2.includes(card));
     if(saveDeck.length > 0){
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
-      setCards((prev) => [...prev, shuffle[0]]);
+      setCards2((prev) => [...prev, shuffle[0]]);
     }
   }, [cards,cards2,deck]);//なんだこれ
 
   useEffect(() =>{
     drawTwoCards();
+ 
     
-  },[]        
+  },[] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
   );
+
+  useEffect(() =>{
+    setMyScore(calcScore(cards2));
+    setDealerScore(calcScore(cards));
+  },[cards, cards2]
+);
   
  
 
@@ -111,6 +141,7 @@ return(
  
                  
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
+          <Text>{dealerScore}</Text>
           <Image
             source={cardImages[cards[0]]}
             style={{
@@ -139,7 +170,7 @@ return(
 
            
                <View style={{ flexDirection: 'row', marginTop: 40 }}>
-
+            <Text>{myScore}</Text>
           <Image
             source={cardImages[cards2[0]]}
             style={{

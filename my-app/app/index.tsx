@@ -18,7 +18,12 @@ export default function Index() {
     }
     return buttonNumber;
   }
-
+  const calcBet =((ptNum:number) => {
+    if(pt - ptNum >= 0){
+    setBet(bet + ptNum);
+    setPt(pt - ptNum);
+  }
+  })
 
   return (
     <ImageBackground 
@@ -30,29 +35,25 @@ export default function Index() {
         source={require('../image/title.jpg')}
         style={{width:"67%",height:"22%", marginBottom:200}}>
         </Image>
-        <Text style={{fontSize: 40,}}>{bet}</Text>
+        <Text style={{fontSize: 40, justifyContent:"center" }}>{bet}</Text>
         
         <View style={{justifyContent: "center", alignItems: "center",flexDirection:"row",gap:20}}>
-          <TouchableOpacity onPress={() =>
-          {
-            setBet(bet + 50);
-            setPt(pt - 50);
-          }}>
+          <TouchableOpacity onPress={() => calcBet(50)}>
           <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
             <Text style={{color:"white"}}>50</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => calcBet(100)}>
           <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
             <Text style={{color:"white"}}>100</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => calcBet(500)}>
           <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
             <Text style={{color:"white"}}>500</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => calcBet(1000)}>
           <View style={{width:45,height:45,backgroundColor:"#FFCC00",borderRadius:100,borderWidth:5,borderColor:"#FFAE00",justifyContent: "center", alignItems: "center"}}>
             <Text style={{color:"white"}}>1k</Text>
           </View>

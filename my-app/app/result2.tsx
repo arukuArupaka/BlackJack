@@ -16,7 +16,6 @@ export default function Index() {
     }
     return buttonNumber;
   }
-
   return (
     <ImageBackground
       source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
@@ -44,7 +43,7 @@ export default function Index() {
               fontSize: 50,
             }}
           >
-            win
+            lose
           </Text>
         </TouchableOpacity>
       </View>

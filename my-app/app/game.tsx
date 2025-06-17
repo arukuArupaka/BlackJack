@@ -57,7 +57,7 @@ import { useBet } from "@/hooks/betManagerContext";
   "13s": require("../cards/13s.gif"),
 };
 
-const CardScores :Record<string,number>={
+const CardScores: Record<string, number> = {
   "01": 1,
   "02": 2,
   "03": 3,
@@ -67,11 +67,11 @@ const CardScores :Record<string,number>={
   "07": 7,
   "08": 8,
   "09": 9,
-  "10":10,
-  "11":10,
-  "12":10,
-  "13":10,
-}
+  "10": 10,
+  "11": 10,
+  "12": 10,
+  "13": 10,
+};
 export default function Game() {
   const { bet, setBet } = useBet();
   const [cards, setCards] = useState<string[]>([]);
@@ -105,14 +105,17 @@ export default function Game() {
    }
 
   const drawTwoCards = useCallback(() => {
-  const shuffle = [...deck].sort(() => Math.random() - 0.5);
-  setCards(shuffle.slice(0, 2));
-  setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
+    const shuffle = [...deck].sort(() => Math.random() - 0.5);
+    setCards(shuffle.slice(0, 2));
+    setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
   }, [deck]);
 
-  const hit = useCallback(() =>{    //
-    const  saveDeck = deck.filter((card) => !cards.includes(card)&& !cards2.includes(card));
-    if(saveDeck.length > 0){
+  const hit = useCallback(() => {
+    //
+    const saveDeck = deck.filter(
+      (card) => !cards.includes(card) && !cards2.includes(card)
+    );
+    if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
     }

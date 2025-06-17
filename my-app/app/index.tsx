@@ -1,11 +1,11 @@
+import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-  const [bet, setBet] = useState(0);
+  const {bet , setBet, pt, setPt} = useBet();
   const [number, setNumber] = useState(0);
-  const [pt, setPt] = useState(5000);
   function numberIncrease(buttonNumber: number) {
     buttonNumber += 1;
     return buttonNumber;

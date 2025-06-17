@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { useEffect, useState , useCallback, } from "react";
 import { Image, ImageBackground, TouchableOpacity, View, Text, } from "react-native";
+import { useBet } from "@/hooks/betManagerContext";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
@@ -72,7 +73,7 @@ const CardScores :Record<string,number>={
   "13":10,
 }
 export default function Game() {
- 
+  const { bet, setBet } = useBet();
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);
   const [myScore, setMyScore] = useState<number>(0);
@@ -99,9 +100,9 @@ export default function Game() {
           }else{
             score += 1;
           }
-        }  
-        return score;
-  }
+         }  
+         return score;
+   }
 
   const drawTwoCards = useCallback(() => {
   const shuffle = [...deck].sort(() => Math.random() - 0.5);
@@ -117,6 +118,11 @@ export default function Game() {
     }
   }, [cards,cards2,deck]);//なんだこれ
 
+  const doubleUp =(() => {        
+     hit();
+     setBet(bet*2); 
+  })
+
   useEffect(() =>{
     drawTwoCards();
  
@@ -124,11 +130,11 @@ export default function Game() {
   },[] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
   );
 
-  useEffect(() =>{
-    setMyScore(calcScore(cards2));
-    setDealerScore(calcScore(cards));
-  },[cards, cards2]
-);
+   useEffect(() =>{
+     setMyScore(calcScore(cards2));
+     setDealerScore(calcScore(cards));
+   },[cards, cards2]
+ );
   
  
 
@@ -138,8 +144,8 @@ return(
           style={{ flex: 1 }}
         >
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
- 
-                 
+          <Text>{bet}</Text>
+                
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
           <Text>{dealerScore}</Text>
           <Image
@@ -193,7 +199,7 @@ return(
             }}
           />
 
-           {cards.slice(2).map((card,index) => (
+           {/* {cards2.slice(2).map((card,index) => (
             <Image
             key = {card}
             source = {cardImages[card]}
@@ -202,12 +208,34 @@ return(
               height: 140,
               marginLeft: -20,
               zIndex: index + 2  }}/>
-          ))}
+          ))} */}
+
+                    <Image
+            source={cardImages[cards2[2]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: 3,
+              borderRadius: 10,
+            }}
+          />
+
+                    <Image
+            source={cardImages[cards2[3]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: 4,
+              borderRadius: 10,
+            }}
+          />
       </View>
               
           
 
-            <TouchableOpacity onPress={() => router.push("/result")} style={{width:171.5,height:85.5,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
+            <TouchableOpacity onPress={() => doubleUp()} style={{width:171.5,height:85.5,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
            <Image
           source={require('../image/doubleupimage.png')}
           style={{width:171.5,height:85.5}}>

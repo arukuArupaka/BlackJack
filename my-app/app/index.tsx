@@ -31,11 +31,12 @@ export default function Index() {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>持ちポイント{pt}</Text>
         <Image
         source={require('../image/title.jpg')}
         style={{width:"67%",height:"22%", marginBottom:200}}>
         </Image>
-        <Text style={{fontSize: 40, justifyContent:"center" }}>{bet}</Text>
+        <Text style={{fontSize: 40,  }}>{bet}</Text>
         
         <View style={{justifyContent: "center", alignItems: "center",flexDirection:"row",gap:20}}>
           <TouchableOpacity onPress={() => calcBet(50)}>
@@ -60,7 +61,7 @@ export default function Index() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => router.push("/game")} style={{width:300,height:150,backgroundColor:"#D9D9D9",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
+        <TouchableOpacity onPress={() => {router.push("/game");  }} style={{width:300,height:150,backgroundColor:"#D9D9D9",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:50}}>
            <Image
           source={require('../image/start.jpg')}
           style={{width:220,height:50}}>

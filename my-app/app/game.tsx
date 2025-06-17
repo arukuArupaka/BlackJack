@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { useEffect, useState , useCallback, } from "react";
+import { useEffect, useState , useCallback, use, } from "react";
 import { Image, ImageBackground, TouchableOpacity, View, Text, } from "react-native";
 import { useBet } from "@/hooks/betManagerContext";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
@@ -82,6 +82,14 @@ export default function Game() {
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
+  const evalScore = (score:number) => {
+    if(score>21){
+      router.push("/result2")
+    }else if(score == 21){
+
+    }else
+   return score;
+  }
   const calcScore = (hand:string[]) : number =>{
     let score = 0;
     let aceNum = 0;
@@ -111,13 +119,14 @@ export default function Game() {
   }, [deck]);
 
   const hit = useCallback(() => {
-    //
+    
     const saveDeck = deck.filter(
       (card) => !cards.includes(card) && !cards2.includes(card)
     );
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
+      console.log(myScore);
     }
   }, [cards,cards2,deck]);//なんだこれ
 
@@ -137,7 +146,12 @@ export default function Game() {
      setMyScore(calcScore(cards2));
      setDealerScore(calcScore(cards));
    },[cards, cards2]
+   
  );
+  useEffect(() =>{
+    evalScore(myScore);
+    evalScore(dealerScore);
+  },[myScore, dealerScore]);
   
  
 

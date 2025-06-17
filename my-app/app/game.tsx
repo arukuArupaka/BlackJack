@@ -1,14 +1,14 @@
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Image,
   ImageBackground,
-  Text,
   TouchableOpacity,
   View,
+  Text,
 } from "react-native";
 const cardImages: Record<string, any> = {
-  //ここなに？？？
+  //Record<K,V> KをキーとしてVを呼び出せる？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
   "03c": require("../cards/03c.gif"),
@@ -62,9 +62,27 @@ const cardImages: Record<string, any> = {
   "12s": require("../cards/12s.gif"),
   "13s": require("../cards/13s.gif"),
 };
+
+const CardScores: Record<string, number> = {
+  "01": 1,
+  "02": 2,
+  "03": 3,
+  "04": 4,
+  "05": 5,
+  "06": 6,
+  "07": 7,
+  "08": 8,
+  "09": 9,
+  "10": 10,
+  "11": 10,
+  "12": 10,
+  "13": 10,
+};
 export default function Game() {
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);
+  const [myScore, setMyScore] = useState<number>(0);
+  const [dealerScore, setDealerScore] = useState<number>(0);
   const mark = ["c", "d", "h", "s"];
   const num = [
     "01",
@@ -82,6 +100,57 @@ export default function Game() {
     "13",
   ];
   const deck = num.flatMap((num) => mark.map((mark) => `${num}${mark}`));
+
+  const calcScore = (hand: string[]): number => {
+    let score = 0;
+    let aceNum = 0;
+
+    hand.forEach((card) => {
+      const cardNum = card.slice(0, -1); //-1??
+      if (cardNum === "01") {
+        aceNum += 1;
+      } else {
+        score += CardScores[cardNum];
+      }
+    });
+    for (let i = 0; i < aceNum; i++) {
+      if (score + 11 <= 21) {
+        score += 11;
+      } else {
+        score += 1;
+      }
+    }
+    return score;
+  };
+
+  const drawTwoCards = useCallback(() => {
+    const shuffle = [...deck].sort(() => Math.random() - 0.5);
+    setCards(shuffle.slice(0, 2));
+    setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
+  }, [deck]);
+
+  const hit = useCallback(() => {
+    //
+    const saveDeck = deck.filter(
+      (card) => !cards.includes(card) && !cards2.includes(card)
+    );
+    if (saveDeck.length > 0) {
+      const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
+      setCards2((prev) => [...prev, shuffle[0]]);
+    }
+  }, [cards, cards2, deck]); //なんだこれ
+
+  useEffect(
+    () => {
+      drawTwoCards();
+    },
+    [] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）
+  );
+
+  useEffect(() => {
+    setMyScore(calcScore(cards2));
+    setDealerScore(calcScore(cards));
+  }, [cards, cards2]);
 
   const drawtwocards = () => {
     const shuffle = [...deck].sort(() => Math.random() - 0.5); //シャッフル

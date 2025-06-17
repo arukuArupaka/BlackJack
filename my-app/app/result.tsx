@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+
+import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const [number, setNumber] = useState(0);
@@ -28,7 +29,7 @@ export default function Index() {
         <TouchableOpacity
           onPress={() => router.push("/")}
           style={{
-            width: 200,
+            width: 300,
             height: 140,
             backgroundColor: "#ffffff",
             justifyContent: "center",
@@ -36,16 +37,13 @@ export default function Index() {
             marginVertical: 15,
             borderRadius: 30,
             marginTop: 50,
-            marginLeft: "24%",
+            marginLeft: "12.5%",
           }}
         >
-          <Text
-            style={{
-              fontSize: 50,
-            }}
-          >
-            win
-          </Text>
+          <Image
+            source={require("../image/resultimage.jpg")}
+            style={{ width: 300, height: 40 }}
+          ></Image>
         </TouchableOpacity>
       </View>
     </ImageBackground>

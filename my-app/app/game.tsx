@@ -78,9 +78,11 @@ export default function Game() {
   const [cards2, setCards2] = useState<string[]>([]);
   const [myScore, setMyScore] = useState<number>(0);
   const [dealerScore, setDealerScore] = useState<number>(0);
+  const [hitNum, setHitNum] = useState<number>(0);
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
+  
   
   const evalmyScore = (myScore:number) => {
     if(myScore>21){                     //バースト
@@ -146,6 +148,7 @@ export default function Game() {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
     }
+      setHitNum(hitNum+1);
   }, [cards,cards2,deck]);//なんだこれ
 
     const hitDealer = useCallback(() => {
@@ -163,6 +166,7 @@ export default function Game() {
   const doubleUp =useCallback(() => {        
      hit();
      setBet(bet*2); 
+     stand();
   }, [cards, cards2, deck]);
 
   const stand= (() =>{//whileが使えないためやけくそif

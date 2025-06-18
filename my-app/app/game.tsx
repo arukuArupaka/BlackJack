@@ -84,18 +84,18 @@ export default function Game() {
   
   const evalmyScore = (myScore:number) => {
     if(myScore>21){                     //バースト
-      router.push("/result2")
+      router.push("/result2") //負け
     }else if(myScore == 21){            //ブラックジャック
-      router.push("/result2")
+      router.push("/result2") //勝ち
     }else
    return myScore;
   }
 
     const evaldealerScore = (dealerScore:number) => {
     if(dealerScore>21){                     //バースト
-      router.push("/result2")
+      router.push("/result2") //勝ち
     }else if(dealerScore == 21){            //ブラックジャック
-      router.push("/result2")
+      router.push("/result2") //負け
     }else
    return dealerScore;
   }
@@ -103,10 +103,10 @@ export default function Game() {
   const judge = ((myScore:number,dealerScore:number) =>{
     if(myScore>dealerScore){
       setBet(bet*2);
-      router.push("/result");
+      router.push("/result"); //勝ち
     }else{
       setBet(0);
-      router.push("/result2");
+      router.push("/result2"); //負け
     }
   })
   const calcScore = (hand:string[]) : number =>{

@@ -83,13 +83,23 @@ export default function Game() {
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
   const evalScore = (score:number) => {
-    if(score>21){
+    if(score>21){                     //バースト
       router.push("/result2")
-    }else if(score == 21){
+    }else if(score == 21){            //ブラックジャック
 
     }else
    return score;
   }
+
+  const judge = ((myScore:number,dealerScore:number) =>{
+    if(myScore>dealerScore){
+      setBet(bet*2);
+      router.push("/result2");
+    }else{
+      setBet(0);
+      router.push("/result2");
+    }
+  })
   const calcScore = (hand:string[]) : number =>{
     let score = 0;
     let aceNum = 0;
@@ -126,19 +136,24 @@ export default function Game() {
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
-      console.log(myScore);
+      console.log(myScore);         //確認用
     }
   }, [cards,cards2,deck]);//なんだこれ
 
-  const doubleUp =(() => {        
+  const doubleUp =useCallback(() => {        
      hit();
      setBet(bet*2); 
-  })
+  }, [cards, cards2, deck]);
+
+  const stand= (() =>{
+    if(dealerScore>17){
+   judge(myScore,dealerScore) }else{
+    hit()//ここまで
+   }
+  });
 
   useEffect(() =>{
-    drawTwoCards();
- 
-    
+    drawTwoCards();    
   },[] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
   );
 

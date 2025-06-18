@@ -82,19 +82,28 @@ export default function Game() {
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
-  const evalScore = (score:number) => {
-    if(score>21){                     //バースト
+  const evalmyScore = (myScore:number) => {
+    if(myScore>21){                     //バースト
       router.push("/result2")
-    }else if(score == 21){            //ブラックジャック
-
+    }else if(myScore == 21){            //ブラックジャック
+      router.push("/result2")
     }else
-   return score;
+   return myScore;
+  }
+
+    const evaldealerScore = (dealerScore:number) => {
+    if(dealerScore>21){                     //バースト
+      router.push("/result2")
+    }else if(dealerScore == 21){            //ブラックジャック
+      router.push("/result2")
+    }else
+   return dealerScore;
   }
 
   const judge = ((myScore:number,dealerScore:number) =>{
     if(myScore>dealerScore){
       setBet(bet*2);
-      router.push("/result2");
+      router.push("/result");
     }else{
       setBet(0);
       router.push("/result2");
@@ -136,20 +145,40 @@ export default function Game() {
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
-      console.log(myScore);         //確認用
     }
   }, [cards,cards2,deck]);//なんだこれ
+
+    const hitDealer = useCallback(() => {
+    
+    const saveDeck = deck.filter(
+      (card) => !cards.includes(card) && !cards2.includes(card)
+    );
+    if (saveDeck.length > 0) {
+      const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
+      setCards((prev) => [...prev, shuffle[0]]);
+      console.log(dealerScore);    //確認用
+    }
+  }, [cards,cards2,deck]);
 
   const doubleUp =useCallback(() => {        
      hit();
      setBet(bet*2); 
   }, [cards, cards2, deck]);
 
-  const stand= (() =>{
+  const stand= (() =>{//whileが使えないためやけくそif
     if(dealerScore>17){
    judge(myScore,dealerScore) }else{
-    hit()//ここまで
-   }
+    hitDealer();
+  }if(dealerScore>17){
+   judge(myScore,dealerScore) }else{
+    hitDealer();
+  }if(dealerScore>17){
+   judge(myScore,dealerScore) }else{
+    hitDealer();
+  }if(dealerScore>17){
+   judge(myScore,dealerScore) }else{
+    hitDealer();
+  }
   });
 
   useEffect(() =>{
@@ -164,8 +193,8 @@ export default function Game() {
    
  );
   useEffect(() =>{
-    evalScore(myScore);
-    evalScore(dealerScore);
+    evalmyScore(myScore);
+    evaldealerScore(dealerScore);
   },[myScore, dealerScore]);
   
  
@@ -291,7 +320,7 @@ return(
             </Image>
 
         </TouchableOpacity>
-    <TouchableOpacity  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20}}>
+    <TouchableOpacity onPress={() =>stand()}  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20}}>
            <Image
           source={require('../image/standimage.png')}
           style={{width:171.5,height:85.5, }}>

@@ -272,9 +272,17 @@ return(
           source={require('../image/doubleupimage.png')}
           style={{width:171.5,height:85.5}}>
             </Image>
-            
-            
         </TouchableOpacity>
+        
+         <TouchableOpacity  onPress={() => {
+            router.push("/result");
+          }} style={{width:20,height:20,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
+           <Image
+          source={require('../image/doubleupimage.png')}
+          style={{width:20,height:20}}>
+            </Image>
+        </TouchableOpacity>
+
     <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>    
        <TouchableOpacity onPress={() => hit()} style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20,marginRight:20}}>
            <Image

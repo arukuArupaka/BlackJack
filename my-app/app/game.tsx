@@ -1,7 +1,7 @@
-import { router } from "expo-router";
-import { useEffect, useState , useCallback, use, } from "react";
-import { Image, ImageBackground, TouchableOpacity, View, Text, } from "react-native";
 import { useBet } from "@/hooks/betManagerContext";
+import { router } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),

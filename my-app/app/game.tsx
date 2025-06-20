@@ -83,7 +83,7 @@ export default function Game() {
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
-  
+    const [fixedCards, setFixedCards] = useState<string[]>([]); // プレイヤーの初回2枚を固定
   
   const evalmyScore = (myScore:number) => {
     if(myScore>21){                     //バースト
@@ -140,7 +140,7 @@ export default function Game() {
     setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
   }, []);
 
-  const hit =  (async() => {
+  const hit =  useCallback(async() => {
 
     await delay(800);
     const saveDeck = deck.filter(
@@ -151,7 +151,10 @@ export default function Game() {
       setCards2((prev) => [...prev, shuffle[0]]);
     }
       setHitNum(false);
-  });//なんだこれ
+      console.log(cards2[0]);
+      console.log(cards2[1]);
+      console.log(cards2[2]);
+  },[deck,cards,cards2]);//なんだこれ
 
     const hitDealer = useCallback(() => {
     
@@ -199,6 +202,12 @@ export default function Game() {
     evalmyScore(myScore);
     evaldealerScore(dealerScore);
   },[myScore, dealerScore]);
+
+   useEffect(() => {
+    if (cards2.length >= 2 && fixedCards.length === 0) {
+      setFixedCards(cards2.slice(0, 2));
+    }
+  }, [cards2, fixedCards]);
   
  
 
@@ -265,12 +274,12 @@ return(
            
                <View style={{ flexDirection: 'row', marginTop: 40 }}>
             <Text>{myScore}</Text>
-          <Image 
+          {/* <Image 
             source={cardImages[cards2[0]]}
             style={{
               width: 100,
               height: 140,
-              marginRight: -20,
+             // marginRight: -20,
               zIndex: 1,
               borderRadius: 10,
             }}
@@ -281,44 +290,85 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              //marginLeft: -20,
               zIndex: 2,
               borderRadius: 10,
             }}
-          />
+          /> */}
 
-           {/* {cards2.slice(2).map((card,index) => (
+           {/* {cards2.map((card,index) => (
             <Image
             key = {card}
             source = {cardImages[card]}
             style = {{
               width: 100,
               height: 140,
-              marginLeft: -20,
-              zIndex: index + 2  }}/>
+              marginLeft: -50,
+              zIndex: index  }}/>
           ))} */}
 
-                    <Image
+                    {/* <Image
             source={cardImages[cards2[2]]}
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              //marginLeft: -20,
               zIndex: 3,
               borderRadius: 10,
             }}
-          />
+          /> 
 
-                    <Image
+                     <Image
             source={cardImages[cards2[3]]}
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+             // marginLeft: -20,
               zIndex: 4,
               borderRadius: 10,
             }}
-          />
+          /> */}
+           {/* 固定された初回2枚 */}
+          {fixedCards[0] && (
+            <Image
+              key={fixedCards[0]}
+              source={cardImages[fixedCards[0]]}
+              style={{
+                width: 100,
+                height: 140,
+                marginLeft: -50,
+                zIndex: 1,
+                borderRadius: 10,
+              }}
+            />
+          )}
+          {fixedCards[1] && (
+            <Image
+              key={fixedCards[1]}
+              source={cardImages[fixedCards[1]]}
+              style={{
+                width: 100,
+                height: 140,
+                marginLeft: -50,
+                zIndex: 2,
+                borderRadius: 10,
+              }}
+            />
+          )}
+          {/* 追加のカード（3枚目以降） */}
+          {cards2.slice(2).map((card, index) => (
+            <Image
+              key={card}
+              source={cardImages[card]}
+              style={{
+                width: 100,
+                height: 140,
+                marginLeft: -50,
+                zIndex: 3 + index,
+                borderRadius: 10,
+              }}
+            />
+          ))}
       </View>
               
           

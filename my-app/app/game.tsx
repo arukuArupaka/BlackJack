@@ -173,15 +173,8 @@ export default function Game() {
     if(dealerScore>17){
    judge(myScore,dealerScore) }else{
     hitDealer();
-  }if(dealerScore>17){
-   judge(myScore,dealerScore) }else{
-    hitDealer();
-  }if(dealerScore>17){
-   judge(myScore,dealerScore) }else{
-    hitDealer();
-  }if(dealerScore>17){
-   judge(myScore,dealerScore) }else{
-    hitDealer();
+    setDealerScore(dealerScore);  //ためしに
+    console.log(dealerScore);
   }
   });
 

@@ -78,7 +78,7 @@ export default function Game() {
   const [cards2, setCards2] = useState<string[]>([]);
   const [myScore, setMyScore] = useState<number>(0);
   const [dealerScore, setDealerScore] = useState<number>(0);
-  const [hitNum, setHitNum] = useState<number>(0);
+  const [hitNum, setHitNum] = useState<boolean>(true);
   const delay =(ms:number) => new Promise((resolve) => setTimeout(resolve,ms)); 
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
@@ -103,7 +103,7 @@ export default function Game() {
    return dealerScore;
   }
 
-  const judge = ((myScore:number,dealerScore:number) =>{
+  const judge = useCallback((myScore:number,dealerScore:number) =>{
     if(myScore>dealerScore){
       setBet(bet*2);
       router.push("/resultwin"); //勝ち
@@ -111,7 +111,7 @@ export default function Game() {
       setBet(0);
       router.push("/resultlose"); //負け
     }
-  })
+  },[setBet,bet,])
   const calcScore = (hand:string[]) : number =>{
     let score = 0;
     let aceNum = 0;
@@ -138,9 +138,9 @@ export default function Game() {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
     setCards(shuffle.slice(0, 2));
     setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
-  }, [deck]);
+  }, []);
 
-  const hit = useCallback (async() => {
+  const hit =  (async() => {
 
     await delay(800);
     const saveDeck = deck.filter(
@@ -150,8 +150,8 @@ export default function Game() {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
     }
-      setHitNum(hitNum+1);
-  }, [cards,cards2,deck]);//なんだこれ
+      setHitNum(false);
+  });//なんだこれ
 
     const hitDealer = useCallback(() => {
     
@@ -163,16 +163,9 @@ export default function Game() {
       setCards((prev) => [...prev, shuffle[0]]);
       console.log(dealerScore);    //確認用
     }
-  }, [cards,cards2,deck]);
+  }, []);
 
-  const doubleUp =useCallback(async() => {
-    await delay(800);        
-     hit();
-     setBet(bet*2); 
-     stand();
-  }, [cards, cards2, deck]);
-
-  const stand= useCallback(async() =>{//whileが使えないためやけくそif
+   const stand= useCallback(async() =>{//whileが使えないためやけくそif
     await delay(800);
     if(dealerScore>17){
    judge(myScore,dealerScore) }else{
@@ -180,7 +173,16 @@ export default function Game() {
     setDealerScore(dealerScore);  //ためしに
     console.log(dealerScore);
   }
-  },[myScore,dealerScore,hitDealer,setDealerScore,judge]);
+  },[]);
+
+  const doubleUp =useCallback(async() => {
+    await delay(800);        
+     hit();
+     setBet(bet*2); 
+     stand();
+  }, []);
+
+
 
   useEffect(() =>{
     drawTwoCards();    
@@ -232,6 +234,30 @@ return(
               borderRadius: 10,
             }}
           />
+
+          
+                    <Image
+            source={cardImages[cards[2]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: 3,
+              borderRadius: 10,
+            }}
+          />
+
+                    <Image
+            source={cardImages[cards[3]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -20,
+              zIndex: 4,
+              borderRadius: 10,
+            }}
+          />
+      
       </View>
          
 
@@ -239,7 +265,7 @@ return(
            
                <View style={{ flexDirection: 'row', marginTop: 40 }}>
             <Text>{myScore}</Text>
-          <Image
+          <Image 
             source={cardImages[cards2[0]]}
             style={{
               width: 100,
@@ -297,21 +323,14 @@ return(
               
           
 
-            <TouchableOpacity onPress={() => doubleUp()} style={{width:171.5,height:85.5,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
+            {hitNum &&(<TouchableOpacity onPress={() => doubleUp()} style={{width:171.5,height:85.5,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
            <Image
           source={require('../image/doubleupimage.png')}
           style={{width:171.5,height:85.5}}>
             </Image>
-        </TouchableOpacity>
+        </TouchableOpacity>)}
         
-         <TouchableOpacity  onPress={() => {
-            router.push("/resultwin");
-          }} style={{width:20,height:20,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
-           <Image
-          source={require('../image/doubleupimage.png')}
-          style={{width:20,height:20}}>
-            </Image>
-        </TouchableOpacity>
+   
 
     <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>    
        <TouchableOpacity onPress={() => hit()} style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20,marginRight:20}}>

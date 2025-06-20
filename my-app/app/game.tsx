@@ -79,6 +79,7 @@ export default function Game() {
   const [myScore, setMyScore] = useState<number>(0);
   const [dealerScore, setDealerScore] = useState<number>(0);
   const [hitNum, setHitNum] = useState<number>(0);
+  const delay =(ms:number) => new Promise((resolve) => setTimeout(resolve,ms)); 
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
@@ -86,18 +87,18 @@ export default function Game() {
   
   const evalmyScore = (myScore:number) => {
     if(myScore>21){                     //バースト
-      router.push("/result2") //負け
+      router.push("/resultlose") //負け
     }else if(myScore == 21){            //ブラックジャック
-      router.push("/result2") //勝ち
+      router.push("/resultwin") //勝ち
     }else
    return myScore;
   }
 
     const evaldealerScore = (dealerScore:number) => {
     if(dealerScore>21){                     //バースト
-      router.push("/result2") //勝ち
+      router.push("/resultwin") //勝ち
     }else if(dealerScore == 21){            //ブラックジャック
-      router.push("/result2") //負け
+      router.push("/resultlose") //負け
     }else
    return dealerScore;
   }
@@ -105,10 +106,10 @@ export default function Game() {
   const judge = ((myScore:number,dealerScore:number) =>{
     if(myScore>dealerScore){
       setBet(bet*2);
-      router.push("/result"); //勝ち
+      router.push("/resultwin"); //勝ち
     }else{
       setBet(0);
-      router.push("/result2"); //負け
+      router.push("/resultlose"); //負け
     }
   })
   const calcScore = (hand:string[]) : number =>{
@@ -139,8 +140,9 @@ export default function Game() {
     setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
   }, [deck]);
 
-  const hit = useCallback(() => {
-    
+  const hit = useCallback (async() => {
+
+    await delay(800);
     const saveDeck = deck.filter(
       (card) => !cards.includes(card) && !cards2.includes(card)
     );
@@ -163,20 +165,22 @@ export default function Game() {
     }
   }, [cards,cards2,deck]);
 
-  const doubleUp =useCallback(() => {        
+  const doubleUp =useCallback(async() => {
+    await delay(800);        
      hit();
      setBet(bet*2); 
      stand();
   }, [cards, cards2, deck]);
 
-  const stand= (() =>{//whileが使えないためやけくそif
+  const stand= useCallback(async() =>{//whileが使えないためやけくそif
+    await delay(800);
     if(dealerScore>17){
    judge(myScore,dealerScore) }else{
     hitDealer();
     setDealerScore(dealerScore);  //ためしに
     console.log(dealerScore);
   }
-  });
+  },[myScore,dealerScore,hitDealer,setDealerScore,judge]);
 
   useEffect(() =>{
     drawTwoCards();    
@@ -301,7 +305,7 @@ return(
         </TouchableOpacity>
         
          <TouchableOpacity  onPress={() => {
-            router.push("/result");
+            router.push("/resultwin");
           }} style={{width:20,height:20,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
            <Image
           source={require('../image/doubleupimage.png')}

@@ -1,3 +1,4 @@
+import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -23,6 +24,7 @@ export default function ResultScreen() {
   // -----------------------------
   const increase = () => setTotal((prev) => prev + 1);
   const decrease = () => setTotal((prev) => (prev > 0 ? prev - 1 : 0));
+  const {bet, setBet} = useBet();
 
   const resultLabel = () => {
     if (total === 0) return "タップして開始"; // Tap to start
@@ -58,7 +60,7 @@ export default function ResultScreen() {
             style={{ width: 220, height: 60, resizeMode: "contain" }}
           />
           <Text style={{ fontSize: 28, fontWeight: "bold", marginTop: 12 }}>
-            win
+            win +{bet}
           </Text>
         </TouchableOpacity>
 

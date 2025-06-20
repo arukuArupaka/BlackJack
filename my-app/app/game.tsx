@@ -85,29 +85,27 @@ export default function Game() {
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
   
-  const evalmyScore = (myScore:number) => {
-    if(myScore>21){                     //バースト
+  const evalmyScore = useCallback((myScore:number) => {
+    if(myScore>21){   
+      setBet(0);                  //バースト
       //router.push("/resultlose") //負け
-    }else if(myScore == 21){            //ブラックジャック
+    }else if(myScore === 21){
+      setBet(bet*2);            //ブラックジャック
       router.push("/resultwin") //勝ち
     }else
-          console.log(cards2[0]);
-      console.log(cards2[1]);
-      console.log(cards2[2]);
-            console.log(cards2[3]);
-      console.log(cards2[4]);
-      console.log(cards2[5]);
    return myScore;
-  }
+  },[bet,setBet])
 
-    const evaldealerScore = (dealerScore:number) => {
-    if(dealerScore>21){                     //バースト
+    const evaldealerScore = useCallback((dealerScore:number) => {
+    if(dealerScore>21){   
+      setBet(bet*2);                  //バースト
       router.push("/resultwin") //勝ち
-    }else if(dealerScore == 21){            //ブラックジャック
+    }else if(dealerScore === 21){  
+      setBet(0);          //ブラックジャック
       router.push("/resultlose") //負け
     }else
    return dealerScore;
-  }
+  },[bet,setBet])
 
   const judge = useCallback((myScore:number,dealerScore:number) =>{
     if(myScore>dealerScore){
@@ -144,7 +142,7 @@ export default function Game() {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
     setCards(shuffle.slice(0, 2));
     setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
-  }, [setCards2,setCards]);
+  }, [setCards2,setCards,deck]);
 
   const hit =  useCallback(async() => {
 
@@ -170,7 +168,7 @@ export default function Game() {
       setCards((prev) => [...prev, shuffle[0]]);
       console.log(dealerScore);    //確認用
     }
-  }, [deck,cards,cards2]);
+  }, [deck,cards,cards2,dealerScore]);
 
    const stand= useCallback(async() =>{//whileが使えないためやけくそif
     await delay(800);
@@ -180,20 +178,20 @@ export default function Game() {
     setDealerScore(dealerScore);  //ためしに
     console.log(dealerScore);
   }
-  },[]);
+  },[dealerScore, myScore, judge, hitDealer]);
 
   const doubleUp =useCallback(async() => {
     await delay(800);        
      hit();
      setBet(bet*2); 
      stand();
-  }, []);
+  }, [bet,hit,stand,setBet]);
 
 
 
   useEffect(() =>{
     drawTwoCards();    
-  },[] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
+  },[drawTwoCards] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
   );
 
    useEffect(() =>{
@@ -205,7 +203,7 @@ export default function Game() {
   useEffect(() =>{
     evalmyScore(myScore);
     evaldealerScore(dealerScore);
-  },[myScore, dealerScore]);
+  },[evalmyScore,evaldealerScore,myScore,dealerScore]);
   
  
 
@@ -225,7 +223,7 @@ return(
               width: 100,
               height: 140,
               marginRight: -20,
-              zIndex: 2,
+              zIndex: 1,
               borderRadius: 10,
             }}
           />
@@ -236,8 +234,8 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
-              zIndex: 1,
+              marginLeft: -30,
+              zIndex: 2,
               borderRadius: 10,
             }}
           />
@@ -248,7 +246,7 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              marginLeft: -30,
               zIndex: 3,
               borderRadius: 10,
             }}
@@ -259,7 +257,7 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              marginLeft: -30,
               zIndex: 4,
               borderRadius: 10,
             }}
@@ -294,7 +292,7 @@ return(
             }}
           />
 
-           {cards2.slice(2).map((card,index) => (
+           {/* {cards2.slice(2).map((card,index) => (
             <Image
             key = {card}
             source = {cardImages[card]}
@@ -303,14 +301,14 @@ return(
               height: 140,
               marginLeft: -50,
               zIndex: index  }}/>
-          ))}
+          ))} */}
 
-                    {/* <Image
+                    <Image
             source={cardImages[cards2[2]]}
             style={{
               width: 100,
               height: 140,
-              //marginLeft: -20,
+              marginLeft: -20,
               zIndex: 3,
               borderRadius: 10,
             }}
@@ -321,11 +319,11 @@ return(
             style={{
               width: 100,
               height: 140,
-             // marginLeft: -20,
+              marginLeft: -20,
               zIndex: 4,
               borderRadius: 10,
             }}
-          /> */}
+          />
       </View>
               
           

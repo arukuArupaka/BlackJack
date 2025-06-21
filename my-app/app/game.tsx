@@ -247,7 +247,7 @@ export default function Game() {
 
     evalmyScore(myScore);
     evaldealerScore(dealerScore);
-  }, [myScore, dealerScore, bet, setBet, gameStart]);
+  }, [myScore, dealerScore, gameStart]);
 
   
  

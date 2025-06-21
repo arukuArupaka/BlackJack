@@ -1,21 +1,26 @@
 import { router } from "expo-router";
-import { useState } from "react";
+import { useBet } from "@/hooks/betManagerContext";
+import { useEffect, useState } from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-  const [number, setNumber] = useState(0);
-  function numberIncrease(buttonNumber: number) {
-    buttonNumber += 1;
-    return buttonNumber;
-  }
-  function numberDecrease(buttonNumber: number) {
-    if (number != 0) {
-      buttonNumber -= 1;
-    } else {
-      return buttonNumber;
-    }
-    return buttonNumber;
-  }
+  // const [number, setNumber] = useState(0);
+  // function numberIncrease(buttonNumber: number) {
+  //   buttonNumber += 1;
+  //   return buttonNumber;
+  // }
+  // function numberDecrease(buttonNumber: number) {
+  //   if (number != 0) {
+  //     buttonNumber -= 1;
+  //   } else {
+  //     return buttonNumber;
+  //   }
+  //   return buttonNumber;
+  // }
+  const{pt,setPt,bet,setBet}=useBet()
+useEffect(()=>{
+  setPt(bet+pt);
+},[])
   return (
     <ImageBackground
       source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
@@ -25,10 +30,10 @@ export default function Index() {
         style={{ flex: 1, marginTop: 50, marginVertical: 20, borderRadius: 30 }}
       >
         <TouchableOpacity
-          onPress={() => router.push("/")}
+          onPress={() => {router.push("/"); setBet(0)}}
           style={{
-            width: 200,
-            height: 140,
+            width: 300,
+            height: 340,
             backgroundColor: "#ffffff",
             justifyContent: "center",
             alignItems: "center",
@@ -43,7 +48,7 @@ export default function Index() {
               fontSize: 50,
             }}
           >
-            win
+            win +{bet} total{pt}
           </Text>
         </TouchableOpacity>
       </View>

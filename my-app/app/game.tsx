@@ -181,17 +181,10 @@ export default function Game() {
     }
   }, [cards,cards2]);
 
-   const stand= useCallback(async() =>{//whileが使えないためやけくそif
+   const stand= useCallback(() =>{//whileが使えないためやけくそif
     setMyturn(false);
-    await delay(800);
-    if(dealerScore>17){
-   judge(myScore,dealerScore) }else{
-    hitDealer();
-    await delay(800);
-
-    console.log(dealerScore);
   }
-  },[dealerScore, myScore, judge, hitDealer]);
+  ,[]);
 
   const doubleUp =useCallback(async() => {
     await delay(800);        
@@ -211,14 +204,27 @@ export default function Game() {
      setMyScore(calcScore(cards2));
       },[cards2]   
  );
-    useEffect(() =>{
-      if (!gameStart) return;
+    useEffect(() =>{ //ディーラーのスコア計算
+      if (!gameStart) return; //ゲーム開始前にfirstdealerhandが実行されるとsliceによりエラーが出る
       if(myturn){
         setDealerScore(firstdealerhand(cards));
       }else{
         setDealerScore(calcScore(cards));
+        //await delay(800);
+        const dealerturn = async() =>{
+          let score = calcScore(cards);
+          while(score <= 17){
+            await hitDealer();
+            await delay(800);
+            score = calcScore(cards);
+            await delay(800);
+          }
+          await judge(myScore,dealerScore);
+          
+      };
+        dealerturn();
       }
-    },[cards,myturn,gameStart])
+    },[cards,myturn,gameStart,myScore,dealerScore])
    useEffect(() => {
     if (!gameStart) return; // ゲーム開始前は評価しない
 

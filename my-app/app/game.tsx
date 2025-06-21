@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
+  "00" : require("../cards/back01.gif"),
   "01c": require("../cards/01c.gif"),
   "02c": require("../cards/02c.gif"),
   "03c": require("../cards/03c.gif"),
@@ -79,47 +80,49 @@ export default function Game() {
   const [myScore, setMyScore] = useState<number>(0);
   const [dealerScore, setDealerScore] = useState<number>(0);
   const [hitNum, setHitNum] = useState<boolean>(true);
+  const [gameStart, setGameStart] = useState<boolean>(false);
+  const [myturn, setMyturn] = useState<boolean>(true);
   const delay =(ms:number) => new Promise((resolve) => setTimeout(resolve,ms)); 
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
   
-  const evalmyScore = useCallback((myScore:number) => {
-    if(myScore>21){   
-      setBet(0);                  //バースト
-      //router.push("/resultlose") //負け
-    }else if(myScore === 21){
-      setBet(bet*2);            //ブラックジャック
-      router.push("/resultwin") //勝ち
-    }else
-   return myScore;
-  },[bet,setBet])
+  // const evalmyScore = useCallback((myScore:number) => {
+  //   if(myScore>21){   
+  //     setBet(0);                  //バースト
+  //     //router.push("/resultlose") //負け
+  //   }else if(myScore === 21){
+  //     setBet(bet*2);            //ブラックジャック
+  //     router.push("/resultwin") //勝ち
+  //   }else
+  //  return myScore;
+  // },[bet,setBet])
 
-    const evaldealerScore = useCallback((dealerScore:number) => {
-    if(dealerScore>21){   
-      setBet(bet*2);                  //バースト
-      router.push("/resultwin") //勝ち
-    }else if(dealerScore === 21){  
-      setBet(0);          //ブラックジャック
-      router.push("/resultlose") //負け
-    }else
-   return dealerScore;
-  },[bet,setBet])
-
-  const judge = useCallback((myScore:number,dealerScore:number) =>{
+  //   const evaldealerScore = useCallback((dealerScore:number) => {
+  //   if(dealerScore>21){   
+  //     setBet(bet*2);                  //バースト
+  //     router.push("/resultwin") //勝ち
+  //   }else if(dealerScore === 21){  
+  //     setBet(0);          //ブラックジャック
+  //     router.push("/resultlose") //負け
+  //   }else
+  //  return dealerScore;
+  // },[bet,setBet])
+  const judge = useCallback(async(myScore:number,dealerScore:number) =>{
     if(myScore>dealerScore){
       setBet(bet*2);
+      delay(800);
       router.push("/resultwin"); //勝ち
     }else{
       setBet(0);
+      delay(800);
       router.push("/resultlose"); //負け
     }
   },[setBet,bet,])
   const calcScore = (hand:string[]) : number =>{
     let score = 0;
     let aceNum = 0;
-
     hand.forEach((card) =>{
       const cardNum = card.slice(0,-1);//-1??
       if(cardNum === "01"){
@@ -138,44 +141,54 @@ export default function Game() {
          return score;
    }
 
+    const firstdealerhand = (cards:string[]):number =>{
+   const card = cards[0]; 
+    const cardNum = card.slice(0,-1);
+    return cardNum === "01" ? 11 : CardScores[cardNum];
+
+  };
+
   const drawTwoCards = useCallback(() => {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
     setCards(shuffle.slice(0, 2));
     setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
-  }, [setCards2,setCards,deck]);
+    setGameStart(true);
+  }, []);
 
   const hit =  useCallback(async() => {
 
-    await delay(800);
     const saveDeck = deck.filter(
       (card) => !cards.includes(card) && !cards2.includes(card)
     );
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
+      await delay(800);
       setCards2((prev) => [...prev, shuffle[0]]);
     }
       setHitNum(false);
 
-  },[deck,cards,cards2]);//なんだこれ
+  },[cards,cards2]);//なんだこれ
 
-    const hitDealer = useCallback(() => {
+    const hitDealer = useCallback(async() => {
     
     const saveDeck = deck.filter(
       (card) => !cards.includes(card) && !cards2.includes(card)
     );
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
+      await delay(800);
       setCards((prev) => [...prev, shuffle[0]]);
-      console.log(dealerScore);    //確認用
     }
-  }, [deck,cards,cards2,dealerScore]);
+  }, [cards,cards2]);
 
    const stand= useCallback(async() =>{//whileが使えないためやけくそif
+    setMyturn(false);
     await delay(800);
     if(dealerScore>17){
    judge(myScore,dealerScore) }else{
     hitDealer();
-    setDealerScore(dealerScore);  //ためしに
+    await delay(800);
+
     console.log(dealerScore);
   }
   },[dealerScore, myScore, judge, hitDealer]);
@@ -191,19 +204,51 @@ export default function Game() {
 
   useEffect(() =>{
     drawTwoCards();    
-  },[drawTwoCards] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
+  },[] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
   );
 
    useEffect(() =>{
      setMyScore(calcScore(cards2));
-     setDealerScore(calcScore(cards));
-   },[cards, cards2]
-   
+      },[cards2]   
  );
-  useEffect(() =>{
+    useEffect(() =>{
+      if (!gameStart) return;
+      if(myturn){
+        setDealerScore(firstdealerhand(cards));
+      }else{
+        setDealerScore(calcScore(cards));
+      }
+    },[cards,myturn,gameStart])
+   useEffect(() => {
+    if (!gameStart) return; // ゲーム開始前は評価しない
+
+    const evalmyScore = async(myScore: number) => {
+      if (myScore > 21) {
+        setBet(0);
+        await delay(800);
+        router.push("/resultlose");
+      } else if (myScore === 21) {
+        setBet(bet * 2);
+        await delay(800);
+        router.push("/resultwin");
+      }
+    };
+    const evaldealerScore = async(dealerScore: number) => {
+      if (dealerScore > 21) {
+        setBet(bet * 2);
+        await delay(800);
+        router.push("/resultwin");
+      } else if (dealerScore === 21) {
+        setBet(0);
+        await delay(800);
+        router.push("/resultlose");
+      }
+    };
+
     evalmyScore(myScore);
     evaldealerScore(dealerScore);
-  },[evalmyScore,evaldealerScore,myScore,dealerScore]);
+  }, [myScore, dealerScore, bet, setBet, gameStart]);
+
   
  
 
@@ -216,7 +261,8 @@ return(
           <Text>{bet}</Text>
                 
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
-          <Text>{dealerScore}</Text>
+          {myturn ? <Text>{dealerScore}</Text>
+          :<Text>{dealerScore}</Text>}
           <Image
             source={cardImages[cards[0]]}
             style={{
@@ -229,7 +275,16 @@ return(
           />
 
     
-          <Image
+          {myturn ? <Image
+            source={require("../cards/back01.gif")}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -30,
+              zIndex: 2,
+              borderRadius: 10,
+            }}
+          /> : <Image
             source={cardImages[cards[1]]}
             style={{
               width: 100,
@@ -238,7 +293,7 @@ return(
               zIndex: 2,
               borderRadius: 10,
             }}
-          />
+          /> }
 
           
                     <Image
@@ -300,7 +355,7 @@ return(
               width: 100,
               height: 140,
               marginLeft: -50,
-              zIndex: index  }}/>
+              zIndex: index+2  }}/>
           ))} */}
 
                     <Image

@@ -211,18 +211,18 @@ export default function Game() {
       }else{
         setDealerScore(calcScore(cards));
         //await delay(800);
-        const dealerturn = async() =>{
-          let score = calcScore(cards);
-          while(score <= 17){
-            await hitDealer();
-            await delay(800);
-            score = calcScore(cards);
-            await delay(800);
-          }
-          await judge(myScore,dealerScore);
+      //   const dealerturn = async() =>{
+      //     let score = calcScore(cards);
+      //     while(score <= 17){
+      //       await hitDealer();
+      //       await delay(800);
+      //       score = calcScore(cards);
+      //       await delay(800);
+      //     }
+      //     await judge(myScore,dealerScore);
           
-      };
-        dealerturn();
+      // };
+        //dealerturn();
       }
     },[cards,myturn,gameStart,myScore,dealerScore])
    useEffect(() => {

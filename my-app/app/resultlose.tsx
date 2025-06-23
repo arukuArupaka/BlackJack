@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
+import { useBet } from "@/hooks/betManagerContext";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {

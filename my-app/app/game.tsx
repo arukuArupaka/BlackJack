@@ -113,10 +113,14 @@ export default function Game() {
     if(myScore>dealerScore){
       setBet(bet*2);
       delay(800);
+      setGameStart(false);
+      setMyturn(true);
       router.push("/resultwin"); //勝ち
     }else{
       setBet(0);
       delay(800);
+      setGameStart(false);
+      setMyturn(true);
       router.push("/resultlose"); //負け
     }
   },[setBet,bet,])
@@ -186,10 +190,10 @@ export default function Game() {
   }
   ,[]);
 
-  const doubleUp =useCallback(async() => {
-    await delay(800);        
+  const doubleUp =useCallback(async() => {       
      hit();
      setBet(bet*2); 
+     await delay(800); 
      stand();
   }, [bet,hit,stand,setBet]);
 
@@ -210,21 +214,27 @@ export default function Game() {
         setDealerScore(firstdealerhand(cards));
       }else{
         setDealerScore(calcScore(cards));
-        //await delay(800);
-      //   const dealerturn = async() =>{
-      //     let score = calcScore(cards);
-      //     while(score <= 17){
-      //       await hitDealer();
-      //       await delay(800);
-      //       score = calcScore(cards);
-      //       await delay(800);
-      //     }
-      //     await judge(myScore,dealerScore);
-          
-      // };
-        //dealerturn();
       }
-    },[cards,myturn,gameStart,myScore,dealerScore])
+    },[myturn,gameStart,dealerScore,cards]
+  );
+
+  useEffect(() => {
+    if (!gameStart || myturn) return;
+
+    const dealerTurn = async () => {
+      let currentScore = calcScore(cards);
+      while (currentScore < 17) {
+        await hitDealer();
+        await delay(800);
+        currentScore = calcScore(cards);
+      }
+      await delay(800);
+      await judge(myScore, currentScore);
+    };
+
+    dealerTurn();
+  }, [myturn, gameStart, judge, myScore]);
+
    useEffect(() => {
     if (!gameStart) return; // ゲーム開始前は評価しない
 
@@ -232,10 +242,14 @@ export default function Game() {
       if (myScore > 21) {
         setBet(0);
         await delay(800);
+        setGameStart(false);
+        setMyturn(true);
         router.push("/resultlose");
       } else if (myScore === 21) {
         setBet(bet * 2);
         await delay(800);
+        setGameStart(false);
+        setMyturn(true);
         router.push("/resultwin");
       }
     };
@@ -243,16 +257,20 @@ export default function Game() {
       if (dealerScore > 21) {
         setBet(bet * 2);
         await delay(800);
+        setGameStart(false);
+        setMyturn(true);
         router.push("/resultwin");
       } else if (dealerScore === 21) {
         setBet(0);
         await delay(800);
+        setGameStart(false);
+        setMyturn(true);
         router.push("/resultlose");
       }
     };
 
     evalmyScore(myScore);
-    evaldealerScore(dealerScore);
+    if(!myturn)evaldealerScore(dealerScore);
   }, [myScore, dealerScore, gameStart]);
 
   

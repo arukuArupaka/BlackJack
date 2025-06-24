@@ -82,197 +82,229 @@ export default function Game() {
   const [hitNum, setHitNum] = useState<boolean>(true);
   const [gameStart, setGameStart] = useState<boolean>(false);
   const [myturn, setMyturn] = useState<boolean>(true);
+  const [gameNow, setGameNow] = useState<boolean>(true);  
   const delay =(ms:number) => new Promise((resolve) => setTimeout(resolve,ms)); 
   const mark = ["c", "d", "h", "s"];
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
-  
-  // const evalmyScore = useCallback((myScore:number) => {
-  //   if(myScore>21){   
-  //     setBet(0);                  //バースト
-  //     //router.push("/resultlose") //負け
-  //   }else if(myScore === 21){
-  //     setBet(bet*2);            //ブラックジャック
-  //     router.push("/resultwin") //勝ち
-  //   }else
-  //  return myScore;
-  // },[bet,setBet])
+  // const judge = useCallback(async(myScore:number,dealerScore:number) =>{
+  //   if(!gameNow ) return;
+  //   if(myScore>dealerScore || dealerScore > 21){
+  //     delay(800);
+  //     setGameNow(false);
+  //     router.push("/resultwin");//勝ち
+  //     setBet(bet*2);
+  //     setGameStart(false);
+  //     setMyturn(true); 
+  //   }else{
+  //     delay(800);
+  //     setGameNow(false);
+  //     router.push("/resultlose"); //負け
+  //     setBet(0);
+  //     setGameStart(false);
+  //     setMyturn(true);
+  //   }if(myScore === dealerScore){
+  //     delay(800);
+  //     setGameNow(false);
+  //     router.push("/resultdraw"); //引き分け
+  //     setBet(0);
+  //     setGameStart(false);
+  //     setMyturn(true);
+  //   }
+  // },[setBet,bet,gameNow, dealerScore])
 
-  //   const evaldealerScore = useCallback((dealerScore:number) => {
-  //   if(dealerScore>21){   
-  //     setBet(bet*2);                  //バースト
-  //     router.push("/resultwin") //勝ち
-  //   }else if(dealerScore === 21){  
-  //     setBet(0);          //ブラックジャック
-  //     router.push("/resultlose") //負け
-  //   }else
-  //  return dealerScore;
-  // },[bet,setBet])
-  const judge = useCallback(async(myScore:number,dealerScore:number) =>{
-    if(myScore>dealerScore){
-      setBet(bet*2);
-      delay(800);
-      setGameStart(false);
-      setMyturn(true);
-      router.push("/resultwin"); //勝ち
-    }else{
-      setBet(0);
-      delay(800);
-      setGameStart(false);
-      setMyturn(true);
-      router.push("/resultlose"); //負け
-    }
-  },[setBet,bet,])
-  const calcScore = (hand:string[]) : number =>{
+  // スコア計算関数
+  const calcScore = (hand: string[]): number => {
     let score = 0;
-    let aceNum = 0;
-    hand.forEach((card) =>{
-      const cardNum = card.slice(0,-1);//-1??
-      if(cardNum === "01"){
-        aceNum += 1;
-      } else{
+    let aceCount = 0;
+
+    hand.forEach((card) => {
+      const cardNum = card.slice(0, -1); // スート（c,d,h,s）を除外
+      if (cardNum === "01") {
+        aceCount += 1;
+      } else {
         score += CardScores[cardNum];
       }
     });
-        for(let i = 0; i < aceNum; i++){
-          if(score + 11 <=21){
-            score += 11;
-          }else{
-            score += 1;
-          }
-         }  
-         return score;
-   }
 
-    const firstdealerhand = (cards:string[]):number =>{
-   const card = cards[0]; 
-    const cardNum = card.slice(0,-1);
-    return cardNum === "01" ? 11 : CardScores[cardNum];
+    // エースの処理
+    for (let i = 0; i < aceCount; i++) {
+      if (score + 11 <= 21) {
+        score += 11;
+      } else {
+        score += 1;
+      }
+    }
 
+    return score;
   };
 
+  // ディーラーの初期スコア（1枚目のカードのみ）
+  const firstDealerHand = (cards: string[]): number => {
+    const card = cards[0];
+    const cardNum = card.slice(0, -1);
+    return cardNum === "01" ? 11 : CardScores[cardNum];
+  };
+
+  // ゲームの勝敗判定
+  const judge = useCallback(
+    async (myScore: number, dealerScore: number) => {
+      if (!gameNow || !gameStart) return;
+
+      await delay(800); // UI更新のためのディレイ
+      setGameNow(false); // ゲーム終了
+
+      // プレイヤーがバースト
+      if (myScore > 21) {
+        setBet(0);
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultlose");
+        return;
+      }
+
+      // プレイヤーがブラックジャック（2枚で21）
+      if (myScore === 21 && cards2.length === 2) {
+        setBet(bet * 2.5); // ブラックジャックは通常1.5倍の配当
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultwin");
+        return;
+      }
+
+      // ディーラーがブラックジャック
+      if (dealerScore === 21 && cards.length === 2 && !myturn) {
+        setBet(0);
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultlose");
+        return;
+      }
+
+      // ディーラーがバースト
+      if (dealerScore > 21) {
+        setBet(bet * 2);
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultwin");
+        return;
+      }
+
+      // スコア比較
+      if (myScore > dealerScore) {
+        setBet(bet * 2);
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultwin");
+      } else if (myScore < dealerScore) {
+        setBet(0);
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultlose");
+      } else {
+        setBet(bet); // 引き分けはベットを返却
+        setGameStart(false);
+        setMyturn(true);
+        router.push("/resultdraw");
+      }
+    },
+    [setBet, bet, gameNow, gameStart, myturn, cards, cards2]
+  );
+
+  // 初期カード配布
   const drawTwoCards = useCallback(() => {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
-    setCards(shuffle.slice(0, 2));
-    setCards2(shuffle.slice(2, 4)); // プレイヤーとディーラーで異なるカード
+    setCards(shuffle.slice(0, 2)); // ディーラー
+    setCards2(shuffle.slice(2, 4)); // プレイヤー
     setGameStart(true);
+    setGameNow(true);
+    setMyturn(true);
   }, []);
 
-  const hit =  useCallback(async() => {
-
-    const saveDeck = deck.filter(
-      (card) => !cards.includes(card) && !cards2.includes(card)
-    );
+  // プレイヤーのヒット
+  const hit = useCallback(async () => {
+    const saveDeck = deck.filter((card) => !cards.includes(card) && !cards2.includes(card));
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
-      await delay(800);
       setCards2((prev) => [...prev, shuffle[0]]);
+      await delay(800); // カード追加後のディレイ
     }
-      setHitNum(false);
+  }, [cards, cards2]);
 
-  },[cards,cards2]);//なんだこれ
-
-    const hitDealer = useCallback(async() => {
-    
-    const saveDeck = deck.filter(
-      (card) => !cards.includes(card) && !cards2.includes(card)
-    );
+  // ディーラーのヒット
+  const hitDealer = useCallback(async () => {
+    const saveDeck = deck.filter((card) => !cards.includes(card) && !cards2.includes(card));
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
-      await delay(800);
       setCards((prev) => [...prev, shuffle[0]]);
+      await delay(800);
     }
-  }, [cards,cards2]);
+  }, [cards, cards2]);
 
-   const stand= useCallback(() =>{//whileが使えないためやけくそif
+  // スタンド
+  const stand = useCallback(() => {
     setMyturn(false);
-  }
-  ,[]);
+  }, []);
 
-  const doubleUp =useCallback(async() => {       
-     hit();
-     setBet(bet*2); 
-     await delay(800); 
-     stand();
-  }, [bet,hit,stand,setBet]);
+  // ダブルダウン
+  const doubleUp = useCallback(
+  async () => {
+    setBet(bet * 2); // ベットを2倍に
+    await hit(); // 1枚カードを引く
+    await delay(800); // UI更新のためのディレイ
+    if (myScore <= 21) {
+      stand(); // バーストしていなければスタンド
+    }
+  },
+  [bet, hit, stand, setBet, myScore] // 依存配列を正しく設定
+);
 
+  // ゲーム初期化
+ useEffect(() => {
+    drawTwoCards();
+  }, [drawTwoCards]);
 
+  // プレイヤースコア更新
+useEffect(() => {
+    setMyScore(calcScore(cards2));
+  }, [cards2]);
 
-  useEffect(() =>{
-    drawTwoCards();    
-  },[] //ここに変数を入れるとその変数が変更されたときに上のやつが実行される。（useEffectの第二引数）   
-  );
+  // ディーラースコア更新
+useEffect(() => {
+    if (!gameStart) return;
+    if (myturn) {
+      setDealerScore(firstDealerHand(cards));
+    } else {
+      setDealerScore(calcScore(cards));
+    }
+  }, [myturn, gameStart, cards]);
 
-   useEffect(() =>{
-     setMyScore(calcScore(cards2));
-      },[cards2]   
- );
-    useEffect(() =>{ //ディーラーのスコア計算
-      if (!gameStart) return; //ゲーム開始前にfirstdealerhandが実行されるとsliceによりエラーが出る
-      if(myturn){
-        setDealerScore(firstdealerhand(cards));
-      }else{
-        setDealerScore(calcScore(cards));
-      }
-    },[myturn,gameStart,dealerScore,cards]
-  );
-
-  useEffect(() => {
-    if (!gameStart || myturn) return;
+  // ディーラーのターン
+useEffect(() => {
+    if (!gameStart || myturn || !gameNow) return;
 
     const dealerTurn = async () => {
       let currentScore = calcScore(cards);
       while (currentScore < 17) {
         await hitDealer();
-        await delay(800);
         currentScore = calcScore(cards);
+        await delay(800);
       }
-      await delay(800);
-      await judge(myScore, currentScore);
+      await judge(myScore, calcScore(cards));
     };
 
     dealerTurn();
-  }, [myturn, gameStart, judge, myScore]);
+  }, [myturn, gameStart, gameNow, myScore, judge, cards, hitDealer]);
 
-   useEffect(() => {
-    if (!gameStart) return; // ゲーム開始前は評価しない
+  // プレイヤーの即時判定（バーストまたはブラックジャック）
+useEffect(() => {
+    if (!gameStart || !gameNow || !myturn) return;
 
-    const evalmyScore = async(myScore: number) => {
-      if (myScore > 21) {
-        setBet(0);
-        await delay(800);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultlose");
-      } else if (myScore === 21) {
-        setBet(bet * 2);
-        await delay(800);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultwin");
-      }
-    };
-    const evaldealerScore = async(dealerScore: number) => {
-      if (dealerScore > 21) {
-        setBet(bet * 2);
-        await delay(800);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultwin");
-      } else if (dealerScore === 21) {
-        setBet(0);
-        await delay(800);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultlose");
-      }
-    };
-
-    evalmyScore(myScore);
-    if(!myturn)evaldealerScore(dealerScore);
-  }, [myScore, dealerScore, gameStart]);
-
+    if (myScore > 21 || (myScore === 21 && cards2.length === 2)) {
+      judge(myScore, dealerScore);
+    }
+  }, [myScore, gameStart, gameNow, myturn, dealerScore, judge, cards2]);
   
  
 
@@ -292,7 +324,7 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginRight: -20,
+              marginRight: -30,
               zIndex: 1,
               borderRadius: 10,
             }}
@@ -354,7 +386,7 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginRight: -20,
+              marginRight: -30,
               zIndex: 1,
               borderRadius: 10,
             }}
@@ -365,7 +397,7 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              marginLeft: -30,
               zIndex: 2,
               borderRadius: 10,
             }}
@@ -387,7 +419,7 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              marginLeft: -30,
               zIndex: 3,
               borderRadius: 10,
             }}
@@ -398,12 +430,27 @@ return(
             style={{
               width: 100,
               height: 140,
-              marginLeft: -20,
+              marginLeft: -30,
               zIndex: 4,
               borderRadius: 10,
             }}
           />
+
+                               <Image
+            source={cardImages[cards2[4]]}
+            style={{
+              width: 100,
+              height: 140,
+              marginLeft: -30,
+              zIndex: 4,
+              borderRadius: 10,
+            }}
+          />
+
+
       </View>
+
+      
               
           
 

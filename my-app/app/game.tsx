@@ -3,59 +3,59 @@ import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
-  "00" : require("../cards/back01.gif"),
-  "01c": require("../cards/01c.gif"),
-  "02c": require("../cards/02c.gif"),
-  "03c": require("../cards/03c.gif"),
-  "04c": require("../cards/04c.gif"),
-  "05c": require("../cards/05c.gif"),
-  "06c": require("../cards/06c.gif"),
-  "07c": require("../cards/07c.gif"),
-  "08c": require("../cards/08c.gif"),
-  "09c": require("../cards/09c.gif"),
-  "10c": require("../cards/10c.gif"),
-  "11c": require("../cards/11c.gif"),
-  "12c": require("../cards/12c.gif"),
-  "13c": require("../cards/13c.gif"),
-  "01d": require("../cards/01d.gif"),
-  "02d": require("../cards/02d.gif"),
-  "03d": require("../cards/03d.gif"),
-  "04d": require("../cards/04d.gif"),
-  "05d": require("../cards/05d.gif"),
-  "06d": require("../cards/06d.gif"),
-  "07d": require("../cards/07d.gif"),
-  "08d": require("../cards/08d.gif"),
-  "09d": require("../cards/09d.gif"),
-  "10d": require("../cards/10d.gif"),
-  "11d": require("../cards/11d.gif"),
-  "12d": require("../cards/12d.gif"),
-  "13d": require("../cards/13d.gif"),
-  "01h": require("../cards/01h.gif"),
-  "02h": require("../cards/02h.gif"),
-  "03h": require("../cards/03h.gif"),
-  "04h": require("../cards/04h.gif"),
-  "05h": require("../cards/05h.gif"),
-  "06h": require("../cards/06h.gif"),
-  "07h": require("../cards/07h.gif"),
-  "08h": require("../cards/08h.gif"),
-  "09h": require("../cards/09h.gif"),
-  "10h": require("../cards/10h.gif"),
-  "11h": require("../cards/11h.gif"),
-  "12h": require("../cards/12h.gif"),
-  "13h": require("../cards/13h.gif"),
-  "01s": require("../cards/01s.gif"),
-  "02s": require("../cards/02s.gif"),
-  "03s": require("../cards/03s.gif"),
-  "04s": require("../cards/04s.gif"),
-  "05s": require("../cards/05s.gif"),
-  "06s": require("../cards/06s.gif"),
-  "07s": require("../cards/07s.gif"),
-  "08s": require("../cards/08s.gif"),
-  "09s": require("../cards/09s.gif"),
-  "10s": require("../cards/10s.gif"),
-  "11s": require("../cards/11s.gif"),
-  "12s": require("../cards/12s.gif"),
-  "13s": require("../cards/13s.gif"),
+  "00": require("../cards/back01.png"),
+  "01c": require("../cards/01c.png"),
+  "02c": require("../cards/02c.png"),
+  "03c": require("../cards/03c.png"),
+  "04c": require("../cards/04c.png"),
+  "05c": require("../cards/05c.png"),
+  "06c": require("../cards/06c.png"),
+  "07c": require("../cards/07c.png"),
+  "08c": require("../cards/08c.png"),
+  "09c": require("../cards/09c.png"),
+  "10c": require("../cards/10c.png"),
+  "11c": require("../cards/11c.png"),
+  "12c": require("../cards/12c.png"),
+  "13c": require("../cards/13c.png"),
+  "01d": require("../cards/01d.png"),
+  "02d": require("../cards/02d.png"),
+  "03d": require("../cards/03d.png"),
+  "04d": require("../cards/04d.png"),
+  "05d": require("../cards/05d.png"),
+  "06d": require("../cards/06d.png"),
+  "07d": require("../cards/07d.png"),
+  "08d": require("../cards/08d.png"),
+  "09d": require("../cards/09d.png"),
+  "10d": require("../cards/10d.png"),
+  "11d": require("../cards/11d.png"),
+  "12d": require("../cards/12d.png"),
+  "13d": require("../cards/13d.png"),
+  "01h": require("../cards/01h.png"),
+  "02h": require("../cards/02h.png"),
+  "03h": require("../cards/03h.png"),
+  "04h": require("../cards/04h.png"),
+  "05h": require("../cards/05h.png"),
+  "06h": require("../cards/06h.png"),
+  "07h": require("../cards/07h.png"),
+  "08h": require("../cards/08h.png"),
+  "09h": require("../cards/09h.png"),
+  "10h": require("../cards/10h.png"),
+  "11h": require("../cards/11h.png"),
+  "12h": require("../cards/12h.png"),
+  "13h": require("../cards/13h.png"),
+  "01s": require("../cards/01s.png"),
+  "02s": require("../cards/02s.png"),
+  "03s": require("../cards/03s.png"),
+  "04s": require("../cards/04s.png"),
+  "05s": require("../cards/05s.png"),
+  "06s": require("../cards/06s.png"),
+  "07s": require("../cards/07s.png"),
+  "08s": require("../cards/08s.png"),
+  "09s": require("../cards/09s.png"),
+  "10s": require("../cards/10s.png"),
+  "11s": require("../cards/11s.png"),
+  "12s": require("../cards/12s.png"),
+  "13s": require("../cards/13s.png")
 };
 
 const CardScores: Record<string, number> = {
@@ -88,46 +88,18 @@ export default function Game() {
   const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
   const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
   
-  // const judge = useCallback(async(myScore:number,dealerScore:number) =>{
-  //   if(!gameNow ) return;
-  //   if(myScore>dealerScore || dealerScore > 21){
-  //     delay(800);
-  //     setGameNow(false);
-  //     router.push("/resultwin");//勝ち
-  //     setBet(bet*2);
-  //     setGameStart(false);
-  //     setMyturn(true); 
-  //   }else{
-  //     delay(800);
-  //     setGameNow(false);
-  //     router.push("/resultlose"); //負け
-  //     setBet(0);
-  //     setGameStart(false);
-  //     setMyturn(true);
-  //   }if(myScore === dealerScore){
-  //     delay(800);
-  //     setGameNow(false);
-  //     router.push("/resultdraw"); //引き分け
-  //     setBet(0);
-  //     setGameStart(false);
-  //     setMyturn(true);
-  //   }
-  // },[setBet,bet,gameNow, dealerScore])
-
-  // スコア計算関数
   const calcScore = (hand: string[]): number => {
     let score = 0;
     let aceCount = 0;
 
     hand.forEach((card) => {
-      const cardNum = card.slice(0, -1); // スート（c,d,h,s）を除外
+      const cardNum = card.slice(0, -1); 
       if (cardNum === "01") {
         aceCount += 1;
       } else {
         score += CardScores[cardNum];
       }
     });
-
     // エースの処理
     for (let i = 0; i < aceCount; i++) {
       if (score + 11 <= 21) {
@@ -136,7 +108,6 @@ export default function Game() {
         score += 1;
       }
     }
-
     return score;
   };
 
@@ -152,10 +123,10 @@ export default function Game() {
     async (myScore: number, dealerScore: number) => {
       if (!gameNow || !gameStart) return;
 
-      await delay(800); // UI更新のためのディレイ
-      setGameNow(false); // ゲーム終了
+      await delay(800); 
+      setGameNow(false); 
 
-      // プレイヤーがバースト
+      
       if (myScore > 21) {
         setBet(0);
         setGameStart(false);
@@ -164,9 +135,9 @@ export default function Game() {
         return;
       }
 
-      // プレイヤーがブラックジャック（2枚で21）
+      
       if (myScore === 21 && cards2.length === 2) {
-        setBet(bet * 2.5); // ブラックジャックは通常1.5倍の配当
+        setBet(bet * 2.5); 
         setGameStart(false);
         setMyturn(true);
         router.push("/resultwin");
@@ -297,7 +268,7 @@ useEffect(() => {
     dealerTurn();
   }, [myturn, gameStart, gameNow, myScore, judge, cards, hitDealer]);
 
-  // プレイヤーの即時判定（バーストまたはブラックジャック）
+
 useEffect(() => {
     if (!gameStart || !gameNow || !myturn) return;
 

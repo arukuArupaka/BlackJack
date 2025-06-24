@@ -2,8 +2,24 @@ import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
- const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
-  "00": require("../cards/back01.png"),
+const CardScores: Record<string, number> = {
+  "01": 1,
+  "02": 2,
+  "03": 3,
+  "04": 4,
+  "05": 5,
+  "06": 6,
+  "07": 7,
+  "08": 8,
+  "09": 9,
+  "10": 10,
+  "11": 10,
+  "12": 10,
+  "13": 10,
+};
+export default function Game() {
+  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
+  //"00": require("../cards/back01.png"),
   "01c": require("../cards/01c.png"),
   "02c": require("../cards/02c.png"),
   "03c": require("../cards/03c.png"),
@@ -58,22 +74,6 @@ import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-nat
   "13s": require("../cards/13s.png")
 };
 
-const CardScores: Record<string, number> = {
-  "01": 1,
-  "02": 2,
-  "03": 3,
-  "04": 4,
-  "05": 5,
-  "06": 6,
-  "07": 7,
-  "08": 8,
-  "09": 9,
-  "10": 10,
-  "11": 10,
-  "12": 10,
-  "13": 10,
-};
-export default function Game() {
   const { bet, setBet } = useBet();
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);

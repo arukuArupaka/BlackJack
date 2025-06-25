@@ -1,7 +1,7 @@
 import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
+import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   "00" : require("../cards2/back01.png"),
   "01c": require("../cards2/01c.png"),
@@ -74,61 +74,6 @@ const CardScores: Record<string, number> = {
   "13": 10,
 };
 export default function Game() {
-  const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
-  //"00": require("../cards/back01.png"),
-  "01c": require("../cards/01c.png"),
-  "02c": require("../cards/02c.png"),
-  "03c": require("../cards/03c.png"),
-  "04c": require("../cards/04c.png"),
-  "05c": require("../cards/05c.png"),
-  "06c": require("../cards/06c.png"),
-  "07c": require("../cards/07c.png"),
-  "08c": require("../cards/08c.png"),
-  "09c": require("../cards/09c.png"),
-  "10c": require("../cards/10c.png"),
-  "11c": require("../cards/11c.png"),
-  "12c": require("../cards/12c.png"),
-  "13c": require("../cards/13c.png"),
-  "01d": require("../cards/01d.png"),
-  "02d": require("../cards/02d.png"),
-  "03d": require("../cards/03d.png"),
-  "04d": require("../cards/04d.png"),
-  "05d": require("../cards/05d.png"),
-  "06d": require("../cards/06d.png"),
-  "07d": require("../cards/07d.png"),
-  "08d": require("../cards/08d.png"),
-  "09d": require("../cards/09d.png"),
-  "10d": require("../cards/10d.png"),
-  "11d": require("../cards/11d.png"),
-  "12d": require("../cards/12d.png"),
-  "13d": require("../cards/13d.png"),
-  "01h": require("../cards/01h.png"),
-  "02h": require("../cards/02h.png"),
-  "03h": require("../cards/03h.png"),
-  "04h": require("../cards/04h.png"),
-  "05h": require("../cards/05h.png"),
-  "06h": require("../cards/06h.png"),
-  "07h": require("../cards/07h.png"),
-  "08h": require("../cards/08h.png"),
-  "09h": require("../cards/09h.png"),
-  "10h": require("../cards/10h.png"),
-  "11h": require("../cards/11h.png"),
-  "12h": require("../cards/12h.png"),
-  "13h": require("../cards/13h.png"),
-  "01s": require("../cards/01s.png"),
-  "02s": require("../cards/02s.png"),
-  "03s": require("../cards/03s.png"),
-  "04s": require("../cards/04s.png"),
-  "05s": require("../cards/05s.png"),
-  "06s": require("../cards/06s.png"),
-  "07s": require("../cards/07s.png"),
-  "08s": require("../cards/08s.png"),
-  "09s": require("../cards/09s.png"),
-  "10s": require("../cards/10s.png"),
-  "11s": require("../cards/11s.png"),
-  "12s": require("../cards/12s.png"),
-  "13s": require("../cards/13s.png")
-};
 
   const { bet, setBet } = useBet();
   const [cards, setCards] = useState<string[]>([]);
@@ -359,7 +304,7 @@ return(
 
     
           {myturn ? <Image
-            source={require("../cards/back01.gif")}
+            source={require("../cards/back01.png")}
             style={{
               width: 100,
               height: 140,

@@ -2,22 +2,6 @@ import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
-const CardScores: Record<string, number> = {
-  "01": 1,
-  "02": 2,
-  "03": 3,
-  "04": 4,
-  "05": 5,
-  "06": 6,
-  "07": 7,
-  "08": 8,
-  "09": 9,
-  "10": 10,
-  "11": 10,
-  "12": 10,
-  "13": 10,
-};
-export default function Game() {
   const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   //"00": require("../cards/back01.png"),
   "01c": require("../cards/01c.png"),
@@ -73,6 +57,23 @@ export default function Game() {
   "12s": require("../cards/12s.png"),
   "13s": require("../cards/13s.png")
 };
+
+const CardScores: Record<string, number> = {
+  "01": 1,
+  "02": 2,
+  "03": 3,
+  "04": 4,
+  "05": 5,
+  "06": 6,
+  "07": 7,
+  "08": 8,
+  "09": 9,
+  "10": 10,
+  "11": 10,
+  "12": 10,
+  "13": 10,
+};
+export default function Game() {
 
   const { bet, setBet } = useBet();
   const [cards, setCards] = useState<string[]>([]);
@@ -254,7 +255,6 @@ useEffect(() => {
   // ディーラーのターン
 useEffect(() => {
     if (!gameStart || myturn || !gameNow) return;
-
     const dealerTurn = async () => {
       let currentScore = calcScore(cards);
       while (currentScore < 17) {
@@ -303,7 +303,7 @@ return(
 
     
           {myturn ? <Image
-            source={require("../cards/back01.gif")}
+            source={require("../cards/back01.png")}
             style={{
               width: 100,
               height: 140,
@@ -445,7 +445,7 @@ return(
         </TouchableOpacity>
     <TouchableOpacity onPress={() =>stand()}  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20}}>
            <Image
-          source={require('../image/standimage.png')}
+            source={require('../image/standimage.png')}
           style={{width:171.5,height:85.5, }}>
             </Image>
 

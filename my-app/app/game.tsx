@@ -1,6 +1,79 @@
 import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+ const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
+  "00" : require("../cards2/back01.png"),
+  "01c": require("../cards2/01c.png"),
+  "02c": require("../cards2/02c.png"),
+  "03c": require("../cards2/03c.png"),
+  "04c": require("../cards2/04c.png"),
+  "05c": require("../cards2/05c.png"),
+  "06c": require("../cards2/06c.png"),
+  "07c": require("../cards2/07c.png"),
+  "08c": require("../cards2/08c.png"),
+  "09c": require("../cards2/09c.png"),
+  "10c": require("../cards2/10c.png"),
+  "11c": require("../cards2/11c.png"),
+  "12c": require("../cards2/12c.png"),
+  "13c": require("../cards2/13c.png"),
+  "01d": require("../cards2/01d.png"),
+  "02d": require("../cards2/02d.png"),
+  "03d": require("../cards2/03d.png"),
+  "04d": require("../cards2/04d.png"),
+  "05d": require("../cards2/05d.png"),
+  "06d": require("../cards2/06d.png"),
+  "07d": require("../cards2/07d.png"),
+  "08d": require("../cards2/08d.png"),
+  "09d": require("../cards2/09d.png"),
+  "10d": require("../cards2/10d.png"),
+  "11d": require("../cards2/11d.png"),
+  "12d": require("../cards2/12d.png"),
+  "13d": require("../cards2/13d.png"),
+  "01h": require("../cards2/01h.png"),
+  "02h": require("../cards2/02h.png"),
+  "03h": require("../cards2/03h.png"),
+  "04h": require("../cards2/04h.png"),
+  "05h": require("../cards2/05h.png"),
+  "06h": require("../cards2/06h.png"),
+  "07h": require("../cards2/07h.png"),
+  "08h": require("../cards2/08h.png"),
+  "09h": require("../cards2/09h.png"),
+  "10h": require("../cards2/10h.png"),
+  "11h": require("../cards2/11h.png"),
+  "12h": require("../cards2/12h.png"),
+  "13h": require("../cards2/13h.png"),
+  "01s": require("../cards2/01s.png"),
+  "02s": require("../cards2/02s.png"),
+  "03s": require("../cards2/03s.png"),
+  "04s": require("../cards2/04s.png"),
+  "05s": require("../cards2/05s.png"),
+  "06s": require("../cards2/06s.png"),
+  "07s": require("../cards2/07s.png"),
+  "08s": require("../cards2/08s.png"),
+  "09s": require("../cards2/09s.png"),
+  "10s": require("../cards2/10s.png"),
+  "11s": require("../cards2/11s.png"),
+  "12s": require("../cards2/12s.png"),
+  "13s": require("../cards2/13s.png"),
+};
+
+const CardScores: Record<string, number> = {
+  "01": 1,
+  "02": 2,
+  "03": 3,
+  "04": 4,
+  "05": 5,
+  "06": 6,
+  "07": 7,
+  "08": 8,
+  "09": 9,
+  "10": 10,
+  "11": 10,
+  "12": 10,
+  "13": 10,
+};
+export default function Game() {
 import { Image, ImageBackground, Text, TouchableOpacity, View, } from "react-native";
   const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
   //"00": require("../cards/back01.png"),
@@ -101,7 +174,7 @@ export default function Game() {
         score += CardScores[cardNum];
       }
     });
-    // エースの処理
+  
     for (let i = 0; i < aceCount; i++) {
       if (score + 11 <= 21) {
         score += 11;
@@ -112,14 +185,11 @@ export default function Game() {
     return score;
   };
 
-  // ディーラーの初期スコア（1枚目のカードのみ）
   const firstDealerHand = (cards: string[]): number => {
     const card = cards[0];
     const cardNum = card.slice(0, -1);
     return cardNum === "01" ? 11 : CardScores[cardNum];
   };
-
-  // ゲームの勝敗判定
   const judge = useCallback(
     async (myScore: number, dealerScore: number) => {
       if (!gameNow || !gameStart) return;
@@ -145,7 +215,6 @@ export default function Game() {
         return;
       }
 
-      // ディーラーがブラックジャック
       if (dealerScore === 21 && cards.length === 2 && !myturn) {
         setBet(0);
         setGameStart(false);
@@ -154,7 +223,6 @@ export default function Game() {
         return;
       }
 
-      // ディーラーがバースト
       if (dealerScore > 21) {
         setBet(bet * 2);
         setGameStart(false);
@@ -163,7 +231,6 @@ export default function Game() {
         return;
       }
 
-      // スコア比較
       if (myScore > dealerScore) {
         setBet(bet * 2);
         setGameStart(false);
@@ -175,7 +242,7 @@ export default function Game() {
         setMyturn(true);
         router.push("/resultlose");
       } else {
-        setBet(bet); // 引き分けはベットを返却
+        setBet(bet); 
         setGameStart(false);
         setMyturn(true);
         router.push("/resultdraw");
@@ -184,27 +251,24 @@ export default function Game() {
     [setBet, bet, gameNow, gameStart, myturn, cards, cards2]
   );
 
-  // 初期カード配布
   const drawTwoCards = useCallback(() => {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
-    setCards(shuffle.slice(0, 2)); // ディーラー
-    setCards2(shuffle.slice(2, 4)); // プレイヤー
+    setCards(shuffle.slice(0, 2)); 
+    setCards2(shuffle.slice(2, 4)); 
     setGameStart(true);
     setGameNow(true);
     setMyturn(true);
   }, []);
 
-  // プレイヤーのヒット
   const hit = useCallback(async () => {
     const saveDeck = deck.filter((card) => !cards.includes(card) && !cards2.includes(card));
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
-      await delay(800); // カード追加後のディレイ
+      await delay(800); 
     }
   }, [cards, cards2]);
 
-  // ディーラーのヒット
   const hitDealer = useCallback(async () => {
     const saveDeck = deck.filter((card) => !cards.includes(card) && !cards2.includes(card));
     if (saveDeck.length > 0) {
@@ -214,35 +278,30 @@ export default function Game() {
     }
   }, [cards, cards2]);
 
-  // スタンド
   const stand = useCallback(() => {
     setMyturn(false);
   }, []);
 
-  // ダブルダウン
   const doubleUp = useCallback(
   async () => {
-    setBet(bet * 2); // ベットを2倍に
-    await hit(); // 1枚カードを引く
-    await delay(800); // UI更新のためのディレイ
+    setBet(bet * 2); 
+    await hit(); 
+    await delay(800); 
     if (myScore <= 21) {
-      stand(); // バーストしていなければスタンド
+      stand();
     }
   },
-  [bet, hit, stand, setBet, myScore] // 依存配列を正しく設定
+  [bet, hit, stand, setBet, myScore] 
 );
 
-  // ゲーム初期化
  useEffect(() => {
     drawTwoCards();
   }, [drawTwoCards]);
 
-  // プレイヤースコア更新
 useEffect(() => {
     setMyScore(calcScore(cards2));
   }, [cards2]);
 
-  // ディーラースコア更新
 useEffect(() => {
     if (!gameStart) return;
     if (myturn) {
@@ -252,7 +311,6 @@ useEffect(() => {
     }
   }, [myturn, gameStart, cards]);
 
-  // ディーラーのターン
 useEffect(() => {
     if (!gameStart || myturn || !gameNow) return;
     const dealerTurn = async () => {
@@ -374,17 +432,6 @@ return(
             }}
           />
 
-           {/* {cards2.slice(2).map((card,index) => (
-            <Image
-            key = {card}
-            source = {cardImages[card]}
-            style = {{
-              width: 100,
-              height: 140,
-              marginLeft: -50,
-              zIndex: index+2  }}/>
-          ))} */}
-
                     <Image
             source={cardImages[cards2[2]]}
             style={{
@@ -453,5 +500,7 @@ return(
   </View>
         
         </ImageBackground>
+        
 )
+
 }

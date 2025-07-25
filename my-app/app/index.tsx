@@ -129,7 +129,7 @@ export default function Index() {
             justifyContent: "center",
             alignItems: "center",
             marginVertical: 15,
-            borderRadius: 30,
+            borderRadius: 500,
             marginTop: 50,
           }}
         >

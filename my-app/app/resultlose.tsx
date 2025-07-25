@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { useBet } from "@/hooks/betManagerContext";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const [number, setNumber] = useState(0);
@@ -19,33 +18,18 @@ export default function Index() {
   }
   return (
     <ImageBackground
-      source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
+      source={require("../image/losebackground.png")}
       style={{ flex: 1 }}
     >
       <View
         style={{ flex: 1, marginTop: 50, marginVertical: 20, borderRadius: 30 }}
       >
         <TouchableOpacity
-          onPress={() => router.push("/")}
-          style={{
-            width: 200,
-            height: 140,
-            backgroundColor: "#ffffff",
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 15,
-            borderRadius: 30,
-            marginTop: 50,
-            marginLeft: "24%",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 50,
-            }}
-          >
-            lose
-          </Text>
+          onPress={() => router.push("/")}>
+        <Image
+                      source={require("../image/loseremove.png")}
+                      style={{ width: 400, height: 200 }}
+                    ></Image>
         </TouchableOpacity>
       </View>
     </ImageBackground>

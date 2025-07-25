@@ -23,19 +23,34 @@ useEffect(()=>{
 },[])
   return (
     <ImageBackground
-      source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
+      source={require("../image/winbackground.png")}
       style={{ flex: 1 }}
     >
       <View
         style={{ flex: 1, marginTop: 50, marginVertical: 100, borderRadius: 80 }}
       >
-        <TouchableOpacity
-          onPress={() => {router.push("/"); setBet(0)}}
-          >
-             <Image
-                                  source={require("../image/win.png")}
-                                  style={{ width: 400, height: 200 }}
+    <Image
+     source={require("../image/winremove.png")}
+     style={{ width: 400, height: 200 }}
                                 ></Image>
+       <TouchableOpacity
+          onPress={() => {router.push("/"); setBet(0)}}
+          style={{
+            width: 250,
+            height: 100,
+            backgroundColor: "#D9D9D9",
+            justifyContent: "center",
+            alignItems: "center",
+            marginVertical: 15,
+            borderRadius: 100,
+            marginTop: 300,
+            
+          }}
+        >
+          <Image
+            source={require("../image/start.jpg")}
+            style={{ width: 220, height: 50, marginRight:100 }}
+          ></Image>
         </TouchableOpacity>
       </View>
     </ImageBackground>

@@ -18,7 +18,7 @@ export default function Index() {
   }
   return (
     <ImageBackground
-      source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
+      source={require("../image/drawbackground.png")}
       style={{ flex: 1 }}
     >
       <View
@@ -28,8 +28,8 @@ export default function Index() {
           onPress={() => router.push("/")}
         >
           <Image
-                      source={require("../image/draw.png")}
-                      style={{ width: 220, height: 50 }}
+                      source={require("../image/drawremove.png")}
+                      style={{ width: 400, height: 200 }}
                     ></Image>
         </TouchableOpacity>
       </View>

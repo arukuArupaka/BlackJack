@@ -1,10 +1,9 @@
 import { useState } from "react";
 import {
-  Image,
   ImageBackground,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 /**
@@ -53,10 +52,10 @@ export default function ResultScreen() {
             marginBottom: 20,
           }}
         >
-          <Image
+          {/* <Image
             source={require("../image/resultimage.jpg")}
             style={{ width: 220, height: 60, resizeMode: "contain" }}
-          />
+          /> */}
           <Text style={{ fontSize: 28, fontWeight: "bold", marginTop: 12 }}>
             {resultLabel()}
           </Text>

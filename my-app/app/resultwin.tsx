@@ -1,7 +1,7 @@
 import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   // const [number, setNumber] = useState(0);
@@ -27,12 +27,27 @@ useEffect(()=>{
       style={{ flex: 1 }}
     >
       <View
-        style={{ flex: 1, marginTop: 50, marginVertical: 100, borderRadius: 80 }}
+        style={{ flex: 1, marginTop: 50, marginVertical: 100, borderRadius: 80, alignItems:"center" }}
       >
     <Image
      source={require("../image/winremove.png")}
      style={{ width: 400, height: 200 }}
                                 ></Image>
+                                <Image
+     source={require("../image/result.png")}
+     style={{ width: 200, height: 80, }}
+                                ></Image> 
+                                <Text
+        style={{
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "white",
+     textDecorationLine: "underline",
+          textDecorationColor: "#28a745", 
+  }}>
+        +{bet}Pt
+        </Text>
+        
        <TouchableOpacity
           onPress={() => {router.push("/"); setBet(0)}}
           style={{
@@ -49,7 +64,7 @@ useEffect(()=>{
         >
           <Image
             source={require("../image/start.jpg")}
-            style={{ width: 220, height: 50, marginRight:100 }}
+            style={{ width: 220, height: 50, resizeMode: 'contain' }}
           ></Image>
         </TouchableOpacity>
       </View>

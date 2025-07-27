@@ -47,7 +47,33 @@ useEffect(()=>{
   }}>
         +{bet}Pt
         </Text>
-        
+        <View style={{ flexDirection: "row", justifyContent: "space-between", width: "80%", marginTop: 30 }}>
+  <View
+    style={{
+      width: "45%",
+      height: 100,
+      backgroundColor: "#ffffffaa", // 半透明の白
+      borderRadius: 20,
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt-bet}</Text>
+  </View>
+
+  <View
+    style={{
+      width: "45%",
+      height: 100,
+      backgroundColor: "#ffffffaa",
+      borderRadius: 20,
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}</Text>
+  </View>
+</View>
        <TouchableOpacity
           onPress={() => {router.push("/"); setBet(0)}}
           style={{
@@ -58,10 +84,10 @@ useEffect(()=>{
             alignItems: "center",
             marginVertical: 15,
             borderRadius: 100,
-            marginTop: 300,
+            marginTop: 100,
             
           }}
-        >
+        >          
           <Image
             source={require("../image/start.jpg")}
             style={{ width: 220, height: 50, resizeMode: 'contain' }}

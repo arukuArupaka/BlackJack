@@ -1,9 +1,18 @@
+import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
-import { useState, } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Index() {
+  const { pt, setPt, bet, setBet, betSave, betSaver } = useBet();
   const [number, setNumber] = useState(0);
+  console.log({ betSaver });
   function numberIncrease(buttonNumber: number) {
     buttonNumber += 1;
     return buttonNumber;
@@ -22,55 +31,71 @@ export default function Index() {
       style={{ flex: 1 }}
     >
       <View
-        style={{ flex: 1, marginTop: 50, marginVertical: 100, borderRadius: 80, alignItems:"center" }}
-      >
-       <Image
-                      source={require("../image/loseremove.png")}
-                      style={{ width: 400, height: 200 }}
-                    ></Image>
-       <Image
-     source={require("../image/result.png")}
-     style={{ width: 200, height: 80, }}
-                                ></Image> 
-             <Text
         style={{
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "white",
-     textDecorationLine: "underline",
-          textDecorationColor: "#ff0019ff", 
-  }}>
-        -{} Pt
+          flex: 1,
+          marginTop: 50,
+          marginVertical: 100,
+          borderRadius: 80,
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={require("../image/loseremove.png")}
+          style={{ width: 400, height: 200 }}
+        ></Image>
+        <Image
+          source={require("../image/result.png")}
+          style={{ width: 200, height: 80 }}
+        ></Image>
+        <Text
+          style={{
+            fontSize: 32,
+            fontWeight: "bold",
+            color: "white",
+            textDecorationLine: "underline",
+            textDecorationColor: "#ff0019ff",
+          }}
+        >
+          -{betSaver} Pt
         </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", width: "80%", marginTop: 30 }}>
-  <View
-    style={{
-      width: "45%",
-      height: 100,
-      backgroundColor: "#ffffffaa", // 半透明の白
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
-  </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "80%",
+            marginTop: 30,
+          }}
+        >
+          <View
+            style={{
+              width: "45%",
+              height: 100,
+              backgroundColor: "#ffffffaa", // 半透明の白
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
+          </View>
 
-  <View
-    style={{
-      width: "45%",
-      height: 100,
-      backgroundColor: "#ffffffaa",
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
-  </View>
-  </View>
-       <TouchableOpacity
-          onPress={() => {router.push("/"); }}
+          <View
+            style={{
+              width: "45%",
+              height: 100,
+              backgroundColor: "#ffffffaa",
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/");
+          }}
           style={{
             width: 250,
             height: 100,
@@ -80,12 +105,11 @@ export default function Index() {
             marginVertical: 15,
             borderRadius: 100,
             marginTop: 100,
-            
           }}
         >
           <Image
             source={require("../image/start.jpg")}
-            style={{ width: 220, height: 50, resizeMode: 'contain' }}
+            style={{ width: 220, height: 50, resizeMode: "contain" }}
           ></Image>
         </TouchableOpacity>
       </View>

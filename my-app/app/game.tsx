@@ -1,9 +1,17 @@
 import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
- const cardImages: Record<string, any> = { //Record<K,V> KをキーとしてVを呼び出せる？
-  "00" : require("../cards2/back01.png"),
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import CutInAnimation from "./animation";
+const cardImages: Record<string, any> = {
+  //Record<K,V> KをキーとしてVを呼び出せる？
+  "00": require("../cards2/back01.png"),
   "01c": require("../cards2/01c.png"),
   "02c": require("../cards2/02c.png"),
   "03c": require("../cards2/03c.png"),
@@ -75,8 +83,7 @@ const CardScores: Record<string, number> = {
 };
 
 export default function Game() {
-
-  const { bet, setBet } = useBet();
+  const { bet, setBet, betSave, setBetSaver } = useBet();
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);
   const [myScore, setMyScore] = useState<number>(0);
@@ -84,25 +91,42 @@ export default function Game() {
   const [hitNum, setHitNum] = useState<boolean>(true);
   const [gameStart, setGameStart] = useState<boolean>(false);
   const [myturn, setMyturn] = useState<boolean>(true);
-  const [gameNow, setGameNow] = useState<boolean>(true);  
-  const delay =(ms:number) => new Promise((resolve) => setTimeout(resolve,ms)); 
+  const [gameNow, setGameNow] = useState<boolean>(true);
+  const [cutInMessage, setCutInMessage] = useState<string>("");
+  const [showCutIn, setShowCutIn] = useState<boolean>(false);
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   const mark = ["c", "d", "h", "s"];
-  const num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
-  const deck = num.flatMap(num => mark.map(mark => `${num}${mark}`));
-  
+  const num = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+  ];
+  const deck = num.flatMap((num) => mark.map((mark) => `${num}${mark}`));
+
   const calcScore = (hand: string[]): number => {
     let score = 0;
     let aceCount = 0;
 
     hand.forEach((card) => {
-      const cardNum = card.slice(0, -1); 
+      const cardNum = card.slice(0, -1);
       if (cardNum === "01") {
         aceCount += 1;
       } else {
         score += CardScores[cardNum];
       }
     });
-  
+
     for (let i = 0; i < aceCount; i++) {
       if (score + 11 <= 21) {
         score += 11;
@@ -121,59 +145,43 @@ export default function Game() {
   const judge = useCallback(
     async (myScore: number, dealerScore: number) => {
       if (!gameNow || !gameStart) return;
+      setGameNow(false);
+      await delay(800);
+      setGameNow(false);
 
-      await delay(800); 
-      setGameNow(false); 
-
-      
       if (myScore > 21) {
-        setBet(0);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultlose");
+        setCutInMessage("Lose");
+        setShowCutIn(true);
         return;
       }
 
-      
       if (myScore === 21 && cards2.length === 2) {
-        setBet(bet * 2.5); 
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultwin");
+        setCutInMessage("BlackJack!");
+        setShowCutIn(true);
         return;
       }
 
       if (dealerScore === 21 && cards.length === 2 && !myturn) {
-        setBet(0);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultlose");
+        setCutInMessage("Lose");
+        setShowCutIn(true);
         return;
       }
 
       if (dealerScore > 21) {
-        setBet(bet * 2);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultwin");
+        setCutInMessage("Win");
+        setShowCutIn(true);
         return;
       }
 
       if (myScore > dealerScore) {
-        setBet(bet * 2);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultwin");
+        setCutInMessage("Win");
+        setShowCutIn(true);
       } else if (myScore < dealerScore) {
-        setBet(0);
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultlose");
+        setCutInMessage("Lose");
+        setShowCutIn(true);
       } else {
-        setBet(bet); 
-        setGameStart(false);
-        setMyturn(true);
-        router.push("/resultdraw");
+        setCutInMessage("Draw");
+        setShowCutIn(true);
       }
     },
     [setBet, bet, gameNow, gameStart, myturn, cards, cards2]
@@ -181,56 +189,62 @@ export default function Game() {
 
   const drawTwoCards = useCallback(() => {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
-    setCards(shuffle.slice(0, 2)); 
-    setCards2(shuffle.slice(2, 4)); 
+    setCards(shuffle.slice(0, 2));
+    setCards2(shuffle.slice(2, 4));
     setGameStart(true);
     setGameNow(true);
     setMyturn(true);
   }, []);
 
   const hit = useCallback(async () => {
-    const saveDeck = deck.filter((card) => !cards.includes(card) && !cards2.includes(card));
+    const saveDeck = deck.filter(
+      (card) => !cards.includes(card) && !cards2.includes(card)
+    );
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards2((prev) => [...prev, shuffle[0]]);
-      await delay(800); 
+      await delay(800);
     }
   }, [cards, cards2]);
 
   const hitDealer = useCallback(async () => {
-    const saveDeck = deck.filter((card) => !cards.includes(card) && !cards2.includes(card));
+    if (!gameNow) return;
+    const saveDeck = deck.filter(
+      (card) => !cards.includes(card) && !cards2.includes(card)
+    );
     if (saveDeck.length > 0) {
       const shuffle = [...saveDeck].sort(() => Math.random() - 0.5);
       setCards((prev) => [...prev, shuffle[0]]);
       await delay(800);
     }
-  }, [cards, cards2]);
+  }, [cards, cards2, gameNow]);
 
   const stand = useCallback(() => {
     setMyturn(false);
   }, []);
 
-  const doubleUp = useCallback(
-  async () => {
-    setBet(bet * 2); 
-    await hit(); 
-    await delay(800); 
+  const doubleUp = useCallback(async () => {
+    setBet(bet * 2);
+    await hit();
+    await delay(800);
     if (myScore <= 21) {
       stand();
     }
-  },
-  [bet, hit, stand, setBet, myScore] 
-);
+  }, [bet, hit, stand, setBet, myScore]);
 
- useEffect(() => {
+  useCallback(() => {
+    setBetSaver(bet);
+  }, []);
+
+  useEffect(() => {
     drawTwoCards();
   }, [drawTwoCards]);
 
-useEffect(() => {
+  useEffect(() => {
     setMyScore(calcScore(cards2));
   }, [cards2]);
 
-useEffect(() => {
+  useEffect(() => {
     if (!gameStart) return;
     if (myturn) {
       setDealerScore(firstDealerHand(cards));
@@ -239,7 +253,7 @@ useEffect(() => {
     }
   }, [myturn, gameStart, cards]);
 
-useEffect(() => {
+  useEffect(() => {
     if (!gameStart || myturn || !gameNow) return;
     const dealerTurn = async () => {
       let currentScore = calcScore(cards);
@@ -254,28 +268,50 @@ useEffect(() => {
     dealerTurn();
   }, [myturn, gameStart, gameNow, myScore, judge, cards, hitDealer]);
 
-
-useEffect(() => {
+  useEffect(() => {
     if (!gameStart || !gameNow || !myturn) return;
 
     if (myScore > 21 || (myScore === 21 && cards2.length === 2)) {
       judge(myScore, dealerScore);
     }
   }, [myScore, gameStart, gameNow, myturn, dealerScore, judge, cards2]);
-  
- 
 
-return(
-    <ImageBackground 
-          source={require('../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg')}
-          style={{ flex: 1 }}
-        >
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Text>{bet}</Text>
-                
-      <View style={{ flexDirection: 'row', marginTop: 20 }}>
-          {myturn ? <Text>{dealerScore}</Text>
-          :<Text>{dealerScore}</Text>}
+  const handleAnimationEnd = useCallback(() => {
+    setShowCutIn(false);
+    setGameStart(false);
+    setMyturn(true);
+
+    if (cutInMessage === "Win" || cutInMessage === "Blackjack!") {
+      setBet(cutInMessage === "Blackjack!" ? bet * 2.5 : bet * 2);
+      router.push("/resultwin");
+    } else if (cutInMessage === "Lose") {
+      setBet(0);
+      router.push("/resultlose");
+    } else {
+      setBet(bet);
+      router.push("/resultdraw");
+    }
+  }, [cutInMessage, bet, setBet]);
+
+  return (
+    <ImageBackground
+      source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
+      style={{ flex: 1 }}
+    >
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <CutInAnimation
+          message={cutInMessage}
+          isVisible={showCutIn}
+          onAnimationEnd={handleAnimationEnd}
+        />
+        <Text style={{ fontFamily: "Ephesis-Regular" }}>{bet}</Text>
+
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          {myturn ? (
+            <Text style={{ fontFamily: "Ephesis-Regular" }}>{dealerScore}</Text>
+          ) : (
+            <Text style={{ fontFamily: "Ephesis-Regular" }}>{dealerScore}</Text>
+          )}
           <Image
             source={cardImages[cards[0]]}
             style={{
@@ -287,29 +323,31 @@ return(
             }}
           />
 
-    
-          {myturn ? <Image
-            source={require("../cards/back01.png")}
-            style={{
-              width: 100,
-              height: 140,
-              marginLeft: -30,
-              zIndex: 2,
-              borderRadius: 10,
-            }}
-          /> : <Image
-            source={cardImages[cards[1]]}
-            style={{
-              width: 100,
-              height: 140,
-              marginLeft: -30,
-              zIndex: 2,
-              borderRadius: 10,
-            }}
-          /> }
+          {myturn ? (
+            <Image
+              source={require("../cards/back01.png")}
+              style={{
+                width: 100,
+                height: 140,
+                marginLeft: -30,
+                zIndex: 2,
+                borderRadius: 10,
+              }}
+            />
+          ) : (
+            <Image
+              source={cardImages[cards[1]]}
+              style={{
+                width: 100,
+                height: 140,
+                marginLeft: -30,
+                zIndex: 2,
+                borderRadius: 10,
+              }}
+            />
+          )}
 
-          
-                    <Image
+          <Image
             source={cardImages[cards[2]]}
             style={{
               width: 100,
@@ -320,7 +358,7 @@ return(
             }}
           />
 
-                    <Image
+          <Image
             source={cardImages[cards[3]]}
             style={{
               width: 100,
@@ -330,15 +368,11 @@ return(
               borderRadius: 10,
             }}
           />
-      
-      </View>
-         
+        </View>
 
-
-           
-               <View style={{ flexDirection: 'row', marginTop: 40 }}>
-            <Text>{myScore}</Text>
-          <Image 
+        <View style={{ flexDirection: "row", marginTop: 40 }}>
+          <Text style={{ fontFamily: "Ephesis-Regular" }}>{myScore}</Text>
+          <Image
             source={cardImages[cards2[0]]}
             style={{
               width: 100,
@@ -360,7 +394,7 @@ return(
             }}
           />
 
-                    <Image
+          <Image
             source={cardImages[cards2[2]]}
             style={{
               width: 100,
@@ -369,9 +403,9 @@ return(
               zIndex: 3,
               borderRadius: 10,
             }}
-          /> 
+          />
 
-                     <Image
+          <Image
             source={cardImages[cards2[3]]}
             style={{
               width: 100,
@@ -382,7 +416,7 @@ return(
             }}
           />
 
-                               <Image
+          <Image
             source={cardImages[cards2[4]]}
             style={{
               width: 100,
@@ -392,43 +426,74 @@ return(
               borderRadius: 10,
             }}
           />
+        </View>
 
+        {hitNum ? (
+          <TouchableOpacity
+            onPress={() => doubleUp()}
+            style={{
+              width: 171.5,
+              height: 85.5,
+              backgroundColor: "#00008b",
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 15,
+              borderRadius: 30,
+              marginTop: 100,
+            }}
+          >
+            <Image
+              source={require("../image/doubleupimage.png")}
+              style={{ width: 171.5, height: 85.5 }}
+            ></Image>
+          </TouchableOpacity>
+        ) : (
+          <View
+            style={{
+              width: 171.5,
+              height: 85.5,
+              marginTop: 100,
+              marginVertical: 15,
+            }}
+          ></View>
+        )}
 
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity
+            onPress={() => hit()}
+            style={{
+              width: 171.5,
+              height: 85.5,
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 15,
+              marginTop: 20,
+              marginRight: 20,
+            }}
+          >
+            <Image
+              source={require("../image/hitimage.png")}
+              style={{ width: 171.5, height: 85.5 }}
+            ></Image>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => stand()}
+            style={{
+              width: 171.5,
+              height: 85.5,
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 15,
+              marginTop: 20,
+            }}
+          >
+            <Image
+              source={require("../image/standimage.png")}
+              style={{ width: 171.5, height: 85.5 }}
+            ></Image>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      
-              
-          
-
-            {hitNum ?(<TouchableOpacity onPress={() => doubleUp()} style={{width:171.5,height:85.5,backgroundColor:"#00008b",justifyContent: "center", alignItems: "center",marginVertical:15,borderRadius:30,marginTop:100}}>
-           <Image
-          source={require('../image/doubleupimage.png')}
-          style={{width:171.5,height:85.5}}>
-            </Image>
-        </TouchableOpacity>) : <View style={{width:171.5, height:85.5, marginTop:100, marginVertical:15 }}></View>}
-            
-        
-   
-
-    <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>    
-       <TouchableOpacity onPress={() => hit()} style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20,marginRight:20}}>
-           <Image
-          source={require('../image/hitimage.png')}
-          style={{width:171.5,height:85.5, }}>
-            </Image>
-
-        </TouchableOpacity>
-    <TouchableOpacity onPress={() =>stand()}  style={{width:171.5,height:85.5,justifyContent: "center", alignItems: "center",marginVertical:15,marginTop:20}}>
-           <Image
-            source={require('../image/standimage.png')}
-          style={{width:171.5,height:85.5, }}>
-            </Image>
-
-        </TouchableOpacity></View>
-  </View>
-        
-        </ImageBackground>
-        
-)
-
+    </ImageBackground>
+  );
 }

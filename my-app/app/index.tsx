@@ -1,6 +1,6 @@
 import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Image,
   ImageBackground,
@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 export default function Index() {
-  const {bet , setBet, pt, setPt} = useBet();
+  const { bet, setBet, pt, setPt, betSave, setBetSave } = useBet();
   const [number, setNumber] = useState(0);
   function numberIncrease(buttonNumber: number) {
     buttonNumber += 1;
@@ -31,18 +31,24 @@ export default function Index() {
     }
   };
 
+  useEffect(() => {
+    setBetSave(bet);
+  }, [bet]);
+
   return (
     <ImageBackground
       source={require("../image/7c45c5c8-06b6-4ef3-a46b-46e6ac72c2cd.jpg")}
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>持ちポイント{pt}</Text>
+        <Text style={{ fontFamily: "Ephesis-Regular" }}>持ちポイント{pt}</Text>
         <Image
           source={require("../image/title.jpg")}
           style={{ width: "67%", height: "22%", marginBottom: 200 }}
         ></Image>
-        <Text style={{ fontSize: 40 }}>{bet}</Text>
+        <Text style={{ fontSize: 40, fontFamily: "Ephesis-Regular" }}>
+          {bet}
+        </Text>
 
         <View
           style={{
@@ -65,7 +71,9 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white" }}>50</Text>
+              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+                50
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => calcBet(100)}>
@@ -81,7 +89,9 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white" }}>100</Text>
+              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+                100
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => calcBet(500)}>
@@ -97,7 +107,9 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white" }}>500</Text>
+              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+                500
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => calcBet(1000)}>
@@ -113,7 +125,9 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white" }}>1k</Text>
+              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+                1k
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -129,7 +143,7 @@ export default function Index() {
             justifyContent: "center",
             alignItems: "center",
             marginVertical: 15,
-            borderRadius: 500,
+            borderRadius: 30,
             marginTop: 50,
           }}
         >

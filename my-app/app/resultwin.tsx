@@ -47,10 +47,10 @@ useEffect(()=>{
   }}>
         +{bet}Pt
         </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", width: "80%", marginTop: 30 }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%", marginTop: 30 }}>
   <View
     style={{
-      width: "45%",
+      width: "40%",
       height: 100,
       backgroundColor: "#ffffffaa", // 半透明の白
       borderRadius: 20,
@@ -58,12 +58,25 @@ useEffect(()=>{
       alignItems: "center",
     }}
   >
-    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt-bet}</Text>
+    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt-bet}Pt</Text>
   </View>
-
+ <View
+    style={{
+      width: "20%",
+      height: 50,
+      justifyContent: "center",
+      alignItems: "center",
+      marginHorizontal:10
+    }}
+  >
+    <Image source={require("../image/UP.png")}
+     style={{ width: 100, height: 40, }}></Image>
+    <Image source={require("../image/yajirusi1.png")}
+     style={{ width: 100, height: 40, }}></Image>
+  </View>
   <View
     style={{
-      width: "45%",
+      width: "40%",
       height: 100,
       backgroundColor: "#ffffffaa",
       borderRadius: 20,
@@ -71,7 +84,7 @@ useEffect(()=>{
       alignItems: "center",
     }}
   >
-    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}</Text>
+    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}Pt</Text>
   </View>
 </View>
        <TouchableOpacity
@@ -79,17 +92,15 @@ useEffect(()=>{
           style={{
             width: 250,
             height: 100,
-            backgroundColor: "#D9D9D9",
             justifyContent: "center",
             alignItems: "center",
             marginVertical: 15,
-            borderRadius: 100,
             marginTop: 100,
             
           }}
         >          
           <Image
-            source={require("../image/start.jpg")}
+            source={require("../image/finish.png")}
             style={{ width: 220, height: 50, resizeMode: 'contain' }}
           ></Image>
         </TouchableOpacity>

@@ -1,6 +1,12 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Index() {
   const [number, setNumber] = useState(0);
@@ -22,71 +28,70 @@ export default function Index() {
       style={{ flex: 1 }}
     >
       <View
-        style={{ flex: 1, marginTop: 50, marginVertical: 100, borderRadius: 80,alignItems:"center" }}
-      >
-        
-          <Image
-                      source={require("../image/drawremove.png")}
-                      style={{ width: 400, height: 200 }}
-                    ></Image>
-       <Image
-     source={require("../image/result.png")}
-     style={{ width: 200, height: 80, }}
-                                ></Image> 
-   <Text
         style={{
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "white",
-     textDecorationLine: "underline",
-          textDecorationColor: "#999999", 
-  }}>
-        ±0 Pt
-   </Text>
-    <View style={{ flexDirection: "row", justifyContent: "space-between", width: "80%", marginTop: 30 }}>
-  <View
-    style={{
-      width: "45%",
-      height: 100,
-      backgroundColor: "#ffffffaa", // 半透明の白
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
-  </View>
+          flex: 1,
+          marginTop: 50,
+          marginVertical: 100,
+          borderRadius: 80,
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={require("../image/drawremove.png")}
+          style={{ width: 400, height: 200 }}
+        ></Image>
+        <Image
+          source={require("../image/result.png")}
+          style={{ width: 200, height: 80 }}
+        ></Image>
+        <Text
+          style={{
+            fontSize: 32,
+            fontWeight: "bold",
+            color: "white",
+            textDecorationLine: "underline",
+            textDecorationColor: "#999999",
+          }}
+        >
+          ±0 Pt
+        </Text>
+        <Image
+          source={require("../image/KEEP.png")}
+          style={{
+            width: 200,
+            height: 80,
+            justifyContent: "center",
+          }}
+        ></Image>
+        <View
+          style={{
+            width: "45%",
+            height: 100,
+            backgroundColor: "#ffffffaa", // 半透明の白
+            borderRadius: 20,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}Pt</Text>
+        </View>
 
-  <View
-    style={{
-      width: "45%",
-      height: 100,
-      backgroundColor: "#ffffffaa",
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
-  </View>
-  </View>
-       <TouchableOpacity
-          onPress={() => {router.push("/"); }}
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/");
+          }}
           style={{
             width: 250,
             height: 100,
-            backgroundColor: "#D9D9D9",
             justifyContent: "center",
             alignItems: "center",
             marginVertical: 15,
-            borderRadius: 100,
-            marginTop: 100,
-            
+            marginTop: 50,
           }}
         >
           <Image
-            source={require("../image/start.jpg")}
-            style={{ width: 220, height: 50, resizeMode: 'contain' }}
+            source={require("../image/finish.png")}
+            style={{ width: 400, height: 200, resizeMode: "contain" }}
           ></Image>
         </TouchableOpacity>
       </View>

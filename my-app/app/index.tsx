@@ -1,6 +1,6 @@
 import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Image,
   ImageBackground,

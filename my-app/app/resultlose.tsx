@@ -62,34 +62,49 @@ export default function Index() {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "80%",
-            marginTop: 30,
+            alignItems: "center",
+            marginTop: 50,
+            marginHorizontal: 25,
           }}
         >
           <View
             style={{
-              width: "45%",
+              width: "40%",
               height: 100,
               backgroundColor: "#ffffffaa", // 半透明の白
-              borderRadius: 20,
+              borderRadius: 30,
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}Pt</Text>
           </View>
-
           <View
             style={{
-              width: "45%",
-              height: 100,
-              backgroundColor: "#ffffffaa",
-              borderRadius: 20,
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}</Text>
+            <Image
+              source={require("../image/DOWN.png")}
+              style={{ width: 100, height: 40 }}
+            ></Image>
+            <Image
+              source={require("../image/yajirusi1.png")}
+              style={{ width: 100, height: 40 }}
+            ></Image>
+          </View>
+          <View
+            style={{
+              width: "40%",
+              height: 100,
+              backgroundColor: "#ffffffaa",
+              borderRadius: 30,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}Pt</Text>
           </View>
         </View>
         <TouchableOpacity
@@ -99,17 +114,15 @@ export default function Index() {
           style={{
             width: 250,
             height: 100,
-            backgroundColor: "#D9D9D9",
             justifyContent: "center",
             alignItems: "center",
             marginVertical: 15,
-            borderRadius: 100,
             marginTop: 100,
           }}
         >
           <Image
-            source={require("../image/start.jpg")}
-            style={{ width: 220, height: 50, resizeMode: "contain" }}
+            source={require("../image/finish.png")}
+            style={{ width: 400, height: 200, resizeMode: "contain" }}
           ></Image>
         </TouchableOpacity>
       </View>

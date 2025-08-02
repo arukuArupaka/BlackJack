@@ -23,7 +23,10 @@ export default function Index() {
   //   }
   //   return buttonNumber;
   // }
-  const { pt, setPt, bet, setBet } = useBet();
+  const { pt, setPt, bet, setBet, betSaver } = useBet();
+  // useEffect(() => {
+  //   setPt(pt + bet);
+  // });
 
   return (
     <ImageBackground
@@ -77,9 +80,7 @@ export default function Index() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-              {pt - bet}Pt
-            </Text>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}Pt</Text>
           </View>
           <View
             style={{
@@ -106,12 +107,15 @@ export default function Index() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}Pt</Text>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+              {pt + bet}Pt
+            </Text>
           </View>
         </View>
         <TouchableOpacity
           onPress={() => {
             router.push("/");
+            setPt(pt + bet);
             setBet(0);
           }}
           style={{

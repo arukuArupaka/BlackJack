@@ -83,7 +83,7 @@ const CardScores: Record<string, number> = {
 };
 
 export default function Game() {
-  const { bet, setBet, saveBet } = useBet();
+  const { bet, setBet, saveBet, pt, setPt } = useBet();
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);
   const [myScore, setMyScore] = useState<number>(0);

@@ -37,12 +37,30 @@ export default function Index() {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontFamily: "Ephesis-Regular" }}>持ちポイント{pt}</Text>
+        <Text
+          style={{
+            fontFamily: "Ephesis-Regular",
+            fontSize: 35,
+          }}
+        >
+          Points:{pt}
+        </Text>
         <Image
           source={require("../image/title.jpg")}
-          style={{ width: "67%", height: "22%", marginBottom: 200 }}
+          style={{
+            width: "67%",
+            height: "22%",
+            marginBottom: 75,
+            marginTop: 50,
+          }}
         ></Image>
-        <Text style={{ fontSize: 40, fontFamily: "Ephesis-Regular" }}>
+        <Text
+          style={{
+            fontSize: 40,
+            fontFamily: "Ephesis-Regular",
+            marginBottom: 75,
+          }}
+        >
           {bet}
         </Text>
 
@@ -67,7 +85,13 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Ephesis-Regular",
+                  fontSize: 23,
+                }}
+              >
                 50
               </Text>
             </View>
@@ -85,7 +109,13 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Ephesis-Regular",
+                  fontSize: 20,
+                }}
+              >
                 100
               </Text>
             </View>
@@ -103,7 +133,13 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Ephesis-Regular",
+                  fontSize: 18,
+                }}
+              >
                 500
               </Text>
             </View>
@@ -121,7 +157,13 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white", fontFamily: "Ephesis-Regular" }}>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Ephesis-Regular",
+                  fontSize: 23,
+                }}
+              >
                 1k
               </Text>
             </View>

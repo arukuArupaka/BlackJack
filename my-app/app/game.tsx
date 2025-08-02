@@ -83,7 +83,7 @@ const CardScores: Record<string, number> = {
 };
 
 export default function Game() {
-  const { bet, setBet, betSave, setBetSaver } = useBet();
+  const { bet, setBet, saveBet } = useBet();
   const [cards, setCards] = useState<string[]>([]);
   const [cards2, setCards2] = useState<string[]>([]);
   const [myScore, setMyScore] = useState<number>(0);
@@ -187,6 +187,8 @@ export default function Game() {
     [setBet, bet, gameNow, gameStart, myturn, cards, cards2]
   );
 
+  //ゲーム終了時betが初期化されるのでここでbetを記憶したい
+
   const drawTwoCards = useCallback(() => {
     const shuffle = [...deck].sort(() => Math.random() - 0.5);
     setCards(shuffle.slice(0, 2));
@@ -231,10 +233,6 @@ export default function Game() {
       stand();
     }
   }, [bet, hit, stand, setBet, myScore]);
-
-  useCallback(() => {
-    setBetSaver(bet);
-  }, []);
 
   useEffect(() => {
     drawTwoCards();
@@ -283,11 +281,14 @@ export default function Game() {
 
     if (cutInMessage === "Win" || cutInMessage === "Blackjack!") {
       setBet(cutInMessage === "Blackjack!" ? bet * 2.5 : bet * 2);
+      saveBet(bet);
       router.push("/resultwin");
     } else if (cutInMessage === "Lose") {
+      saveBet(bet);
       setBet(0);
       router.push("/resultlose");
     } else {
+      saveBet(bet);
       setBet(bet);
       router.push("/resultdraw");
     }

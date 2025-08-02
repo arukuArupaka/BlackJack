@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 export default function Index() {
-  const { bet, setBet, pt, setPt, betSave, setBetSave } = useBet();
+  const { bet, setBet, pt, setPt } = useBet();
   const [number, setNumber] = useState(0);
   function numberIncrease(buttonNumber: number) {
     buttonNumber += 1;
@@ -30,10 +30,6 @@ export default function Index() {
       setPt(pt - ptNum);
     }
   };
-
-  useEffect(() => {
-    setBetSave(bet);
-  }, [bet]);
 
   return (
     <ImageBackground

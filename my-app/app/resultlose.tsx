@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 export default function Index() {
-  const { pt, setPt, bet, setBet, betSave, betSaver } = useBet();
+  const { betSaver } = useBet();
   const [number, setNumber] = useState(0);
   console.log({ betSaver });
   function numberIncrease(buttonNumber: number) {

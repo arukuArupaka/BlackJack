@@ -23,7 +23,7 @@ export default function Index() {
   //   }
   //   return buttonNumber;
   // }
-  const { pt, setPt, bet, setBet, betSave } = useBet();
+  const { pt, setPt, bet, setBet } = useBet();
 
   return (
     <ImageBackground
@@ -62,8 +62,9 @@ export default function Index() {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "90%",
-            marginTop: 30,
+            alignItems: "center",
+            marginTop: 50,
+            marginHorizontal: 25,
           }}
         >
           <View
@@ -71,7 +72,7 @@ export default function Index() {
               width: "40%",
               height: 100,
               backgroundColor: "#ffffffaa", // 半透明の白
-              borderRadius: 20,
+              borderRadius: 30,
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -82,11 +83,8 @@ export default function Index() {
           </View>
           <View
             style={{
-              width: "20%",
-              height: 50,
               justifyContent: "center",
               alignItems: "center",
-              marginHorizontal: 10,
             }}
           >
             <Image
@@ -103,7 +101,7 @@ export default function Index() {
               width: "40%",
               height: 100,
               backgroundColor: "#ffffffaa",
-              borderRadius: 20,
+              borderRadius: 30,
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -127,7 +125,7 @@ export default function Index() {
         >
           <Image
             source={require("../image/finish.png")}
-            style={{ width: 220, height: 50, resizeMode: "contain" }}
+            style={{ width: 400, height: 200, resizeMode: "contain" }}
           ></Image>
         </TouchableOpacity>
       </View>

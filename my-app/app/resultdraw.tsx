@@ -1,3 +1,4 @@
+import { useBet } from "@/hooks/betManagerContext";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 
 export default function Index() {
+  const { pt } = useBet();
   const [number, setNumber] = useState(0);
   function numberIncrease(buttonNumber: number) {
     buttonNumber += 1;
@@ -73,7 +75,7 @@ export default function Index() {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}Pt</Text>
+          <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}Pt</Text>
         </View>
 
         <TouchableOpacity

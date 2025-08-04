@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 export default function Index() {
-  const { betSaver } = useBet();
+  const { pt, betSaver } = useBet();
   const [number, setNumber] = useState(0);
   console.log({ betSaver });
   function numberIncrease(buttonNumber: number) {
@@ -77,7 +77,9 @@ export default function Index() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}Pt</Text>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+              {pt + betSaver}Pt
+            </Text>
           </View>
           <View
             style={{
@@ -104,7 +106,7 @@ export default function Index() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{}Pt</Text>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{pt}Pt</Text>
           </View>
         </View>
         <TouchableOpacity
